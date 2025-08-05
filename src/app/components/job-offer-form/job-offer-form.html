@@ -1,0 +1,61 @@
+<div class="job-offer-form-container">
+  <h2>{{ isEditMode ? 'Edit' : 'Create' }} Job Offer</h2>
+  <form [formGroup]="jobOfferForm" (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+      <label for="company_id" class="form-label">Company</label>
+      <select class="form-control" id="company_id" formControlName="company_id">
+        <option value="">Select a company</option>
+        <option *ngFor="let company of companies" [value]="company.id">{{ company.name }}</option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label for="title" class="form-label">Job Title</label>
+      <input type="text" class="form-control" id="title" formControlName="title">
+    </div>
+
+    <div class="mb-3">
+      <label for="description" class="form-label">Description</label>
+      <textarea class="form-control" id="description" formControlName="description" rows="3"></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label for="type" class="form-label">Type</label>
+      <select class="form-control" id="type" formControlName="type">
+        <option value="">Select job type</option>
+        <option value="hybrid">Hybrid</option>
+        <option value="remote">Remote</option>
+        <option value="onSite">On site</option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label for="deadline" class="form-label">Deadline</label>
+      <input type="date" class="form-control" id="deadline" formControlName="deadline">
+    </div>
+
+    <div class="mb-3">
+      <label for="salary" class="form-label">Salary</label>
+      <input type="text" class="form-control" id="salary" formControlName="salary">
+    </div>
+
+    <div class="mb-3">
+      <label for="location" class="form-label">Location</label>
+      <input type="text" class="form-control" id="location" formControlName="location"/>
+    </div>
+
+    <!-- <div class="mb-3">
+      <label for="resume" class="form-label">Resume (PDF)</label>
+      <input type="file" class="form-control" id="resume" (change)="onFileChange($event)" accept=".pdf">
+    </div> -->
+
+
+    <!-- Form Actions -->
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary" [disabled]="!jobOfferForm.valid">
+        {{ isEditMode ? 'Update' : 'Create' }}
+      </button>
+      <button (click)="goBack()" class="btn btn-secondary">Cancel</button>
+    </div>
+  </form>
+</div>

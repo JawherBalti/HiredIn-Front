@@ -1,0 +1,11 @@
+<div class="notifications-dropdown">
+    <!-- <button (click)="markAsRead()" *ngIf="unreadCount > 0">
+        Mark all as read
+    </button> -->
+    
+    <div *ngFor="let notification of notifications" 
+         [class.unread]="!notification.read_at">
+        <p>{{ notification.data.message }}</p>
+        <small>{{ notification.created_at }}</small>
+    </div>
+</div>

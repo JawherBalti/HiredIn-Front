@@ -1,0 +1,48 @@
+<!-- src/app/components/job-applications/job-applications.component.html -->
+<div class="applications-container">
+  <h2>  
+    <button mat-icon-button class="back-button" (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+    </button> Job Applications
+  </h2>
+  
+  <div *ngIf="isLoading">Loading applications...</div>
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+  
+  <div *ngIf="!isLoading && applications.length === 0" class="no-applications">
+    No applications received yet.
+  </div>
+  
+  <div *ngFor="let app of applications" class="application-card">
+    <div class="job-info">
+      <h3>{{ app.job_offer.title }}</h3>
+      <p>Job description: {{ app.job_offer.description }}</p>
+      <p>Ends on: {{ app.job_offer.deadline | date:'mediumDate' }}</p>
+    </div>
+    <div class="applicant-info">
+      <h3>{{ app.user.name }}</h3>
+      <p>Email: {{ app.user.email }}</p>
+      <p>Applied on: {{ app.created_at | date:'mediumDate' }}</p>
+      <p>Status: 
+        <span [class]="'status-' + app.status">{{ app.status }}</span>
+      </p>
+    </div>
+    
+    <div class="application-actions">
+      <button (click)="downloadResume(app.id)">Download Resume</button>
+      
+      <div class="status-actions">
+        <select #statusSelect (change)="updateStatus(app.id, statusSelect.value)">
+          <option value="pending" [selected]="app.status === 'pending'">Pending</option>
+          <option value="rejected" [selected]="app.status === 'rejected'">Rejected</option>
+          <option value="accepted" [selected]="app.status === 'accepted'">Accepted</option>
+        </select>
+      </div>
+    </div>
+    
+    <div *ngIf="app.cover_letter" class="cover-letter">
+      <h4>Cover Letter:</h4>
+      <p>{{ app.cover_letter }}</p>
+    </div>
+  </div>
+</div>

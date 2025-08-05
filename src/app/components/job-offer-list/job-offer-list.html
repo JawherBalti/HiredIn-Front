@@ -1,0 +1,147 @@
+<section class="jobs-section">
+  <div class="section-header">
+    <h2>Your Job <span class="highlight">{{jobCategory}}</span></h2>
+    <p>Track all your job opportunities in one place</p>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-overlay active">
+    <div class="spinner"></div>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Status Tabs -->
+  <div class="status-tabs">
+    <button *ngFor="let status of statuses" 
+            [class.active]="activeStatus === status"
+            (click)="setActiveStatus(status)">
+      {{ status | titlecase }} 
+      <span class="count-badge">
+        <!-- Special handling for 'applied' tab -->
+        <ng-container *ngIf="status !== 'applied'; else appliedCount">
+          ({{ filteredJobs[status]?.length || 0 }})
+        </ng-container>
+        <ng-template #appliedCount>
+          ({{ appliedJobs?.length || 0 }})
+        </ng-template>
+      </span>
+    </button>
+  </div>
+
+  <!-- Job Cards Grid -->
+  <div class="jobs-grid" *ngIf="activeStatus !== 'applied'; else appliedJobsSection">
+    <div *ngFor="let job of filteredJobs[activeStatus]" 
+        class="job-card"
+        cdkDrag>
+      <div class="job-badge">{{ job.type }}</div>
+      <div class="job-content">
+        <div class="company-logo">
+          <img [src]="job?.company?.logo || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlm0t5PrvJkY1Mnh8pMH1l0eTXgTbvLetn7g&s'" 
+               [alt]="job.company?.name + ' logo'">
+        </div>
+        <div class="job-info">
+          <h3>{{ job.title }}</h3>
+          <p class="company">{{ job.company?.name }}</p>
+          <div class="job-meta">
+            <span class="location">
+              <mat-icon>location_on</mat-icon>
+              {{job.location}}
+            </span>
+            <span class="salary">
+              <mat-icon>attach_money</mat-icon>
+              {{ job.salary || 'Negotiable' }}
+            </span>
+            <span class="deadline" *ngIf="job.deadline">
+              <mat-icon>event</mat-icon>
+              {{ job.deadline | date }}
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="job-footer">
+      <span *ngIf="job.created_at" class="posted-date">
+        Posted {{ job.created_at | dateAgo }}
+      </span>
+        <div class="job-actions">
+          <button mat-stroked-button class="view-button" 
+                  [routerLink]="['/job-offers', job.id]">
+            View
+          </button>
+          <button mat-stroked-button class="view-button" *ngIf="isJobCreator(job)" [routerLink]="['/jobs', job.id, 'applications']">
+            Applications
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #appliedJobsSection>
+    <div class="jobs-grid" *ngIf="appliedJobs?.length; else noJobs">
+      <div *ngFor="let job of appliedJobs" class="job-card">
+        <div class="job-badge">{{ job.type }}</div>
+        <div class="job-content">
+          <div class="company-logo">
+            <img [src]="job?.company?.logo || 'default-logo.png'" 
+                [alt]="job.company?.name + ' logo'">
+          </div>
+          <div class="job-info">
+            <h3>{{ job.title }}</h3>
+            <p class="company">{{ job.company?.name }}</p>
+            <div class="application-status">
+              <span class="status-badge" [class.pending]="job.application_status === 'pending'"
+                    [class.reviewed]="job.application_status === 'reviewed'"
+                    [class.accepted]="job.application_status === 'accepted'"
+                    [class.rejected]="job.application_status === 'rejected'">
+                {{ job.application_status | titlecase }}
+              </span>
+
+            </div>
+            <div class="job-meta">
+              <span class="location">
+                <mat-icon>location_on</mat-icon>
+                {{job.location}}
+              </span>
+              <span class="salary">
+                <mat-icon>attach_money</mat-icon>
+                {{ job.salary || 'Negotiable' }}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="job-footer">
+          <span class="posted-date">
+            Applied {{ job.applied_at | dateAgo }}
+          </span>
+          <div class="job-actions">
+            <button mat-stroked-button class="view-button" 
+                    [routerLink]="['/job-offers', job.id]">
+              View Job
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template #noJobs>
+    <div class="no-jobs-message">
+      <mat-icon>work_outline</mat-icon>
+      <p>No {{ activeStatus }} jobs found</p>
+      <button mat-raised-button color="primary" 
+              routerLink="/job-offers/create">
+        Add New Job Application
+      </button>
+    </div>
+  </ng-template>
+
+  <div class="section-footer">
+    <button mat-raised-button color="primary" 
+            routerLink="/job-offers/create" class="add-button">
+      <mat-icon>add</mat-icon> Add New Job Application
+    </button>
+  </div>
+</section>

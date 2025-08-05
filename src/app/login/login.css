@@ -1,0 +1,99 @@
+/* login.component.css */
+.login-container {
+  max-width: 400px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.login-container h2 {
+  text-align: center;
+  color: #3f51b5;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  text-align: center;
+  color: #5a6a85;
+  margin-bottom: 2rem;
+}
+
+mat-form-field {
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+.forgot-password {
+  text-align: right;
+  margin-bottom: 1.5rem;
+}
+
+.forgot-password a {
+  color: #5a6a85;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.forgot-password a:hover {
+  text-decoration: underline;
+}
+
+button[mat-raised-button] {
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+  margin-right: 8px;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.error-message {
+  display: flex;
+  align-items: center;
+  color: #f44336;
+  margin: 1rem 0;
+  padding: 0.75rem;
+  background: rgba(244, 67, 54, 0.1);
+  border-radius: 4px;
+}
+
+.error-message mat-icon {
+  margin-right: 8px;
+  font-size: 1.2rem;
+}
+
+.register-link {
+  text-align: center;
+  margin-top: 1.5rem;
+  color: #5a6a85;
+}
+
+.register-link a {
+  color: #3f51b5;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.register-link a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .login-container {
+    margin: 1rem;
+    padding: 1.5rem;
+    box-shadow: none;
+    border: 1px solid #eee;
+  }
+}

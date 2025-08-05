@@ -1,0 +1,51 @@
+<div *ngIf="!applicationSuccess" class="apply-form">
+  <h2>Apply to Job</h2>
+  
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+  
+  <form [formGroup]="applyForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="resume">Resume (PDF or DOC)</label>
+      <input 
+        type="file" 
+        id="resume" 
+        formControlName="resume"
+        (change)="onFileSelected($event)" 
+        accept=".pdf,.doc,.docx" 
+        [class.is-invalid]="f['resume'].touched && f['resume'].invalid"
+      >
+      <div *ngIf="f['resume'].touched && f['resume'].invalid" class="invalid-feedback">
+        Resume is required
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label for="coverLetter">Cover Letter (Optional)</label>
+      <textarea 
+        id="coverLetter" 
+        formControlName="coverLetter"
+        rows="5"
+        placeholder="Write your cover letter here..."
+      ></textarea>
+    </div>
+    
+    <button 
+      type="submit" 
+      [disabled]="isApplying || applyForm.invalid"
+      mat-raised-button 
+      color="primary"
+    >
+      <span *ngIf="!isApplying">Submit Application</span>
+      <span *ngIf="isApplying">
+        <mat-icon class="spinner">hourglass_empty</mat-icon>
+        Applying...
+      </span>
+    </button>
+  </form>
+</div>
+
+<div *ngIf="applicationSuccess" class="success-message">
+  <h2>Application Submitted Successfully!</h2>
+  <p>Your application has been received. The employer will review your resume.</p>
+  <button mat-raised-button color="primary" [routerLink]="['/job-offers']">Back to Jobs</button>
+</div>

@@ -1,0 +1,46 @@
+<!-- login.component.html -->
+<div class="login-container">
+  <h2>Welcome Back</h2>
+  <p class="subtitle">Sign in to continue to JobTrack</p>
+
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput type="email" formControlName="email" required>
+      <mat-icon matSuffix>mail</mat-icon>
+      <mat-error *ngIf="loginForm.get('email')?.invalid">
+        Please enter a valid email
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Password</mat-label>
+      <input matInput type="password" formControlName="password" required>
+      <mat-icon matSuffix>lock</mat-icon>
+      <mat-error *ngIf="loginForm.get('password')?.invalid">
+        Password is required
+      </mat-error>
+    </mat-form-field>
+
+    <div class="forgot-password">
+      <a routerLink="/forgot-password">Forgot password?</a>
+    </div>
+
+    <button mat-raised-button color="primary" type="submit" [disabled]="loading">
+      <span *ngIf="!loading">Sign In</span>
+      <span *ngIf="loading">
+        <mat-icon class="spinner">hourglass_empty</mat-icon>
+        Signing in...
+      </span>
+    </button>
+
+    <div *ngIf="error" class="error-message">
+      <mat-icon>error</mat-icon>
+      {{ error }}
+    </div>
+
+    <div class="register-link">
+      Don't have an account? <a routerLink="/register">Create one</a>
+    </div>
+  </form>
+</div>

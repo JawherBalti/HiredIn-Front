@@ -1,0 +1,129 @@
+/* src/app/components/job-applications/job-applications.component.css */
+.applications-container {
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+
+.applications-container h2 {
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #ecf0f1;
+}
+
+.no-applications {
+  text-align: center;
+  padding: 2rem;
+  color: #7f8c8d;
+  background: #f9f9f9;
+  border-radius: 8px;
+}
+
+.application-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.applicant-info {
+  border-top: 1px solid #ecf0f1
+}
+
+.applicant-info h3 {
+  color: #3498db;
+  margin-bottom: 0.5rem;
+}
+
+.applicant-info p {
+  color: #7f8c8d;
+  margin: 0.25rem 0;
+}
+
+.application-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1rem 0;
+  padding-top: 1rem;
+  border-top: 1px solid #ecf0f1;
+}
+
+.application-actions button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.application-actions button:hover {
+  background-color: #2980b9;
+}
+
+.status-actions select {
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  background: #f9f9f9;
+  cursor: pointer;
+}
+
+.cover-letter {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #ecf0f1;
+}
+
+.cover-letter h4 {
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+.cover-letter p {
+  color: #34495e;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+/* Status badges */
+.status-pending {
+  color: #f39c12;
+  font-weight: 600;
+}
+
+.status-reviewed {
+  color: #3498db;
+  font-weight: 600;
+}
+
+.status-rejected {
+  color: #e74c3c;
+  font-weight: 600;
+}
+
+.status-accepted {
+  color: #2ecc71;
+  font-weight: 600;
+}
+
+.is-loading {
+  text-align: center;
+  padding: 2rem;
+  color: #7f8c8d;
+}
+
+.alert-danger {
+  color: #e74c3c;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  background-color: #fadbd8;
+  border-radius: 4px;
+  border-left: 4px solid #e74c3c;
+}

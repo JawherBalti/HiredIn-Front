@@ -1,0 +1,80 @@
+<nav class="navbar">
+  <div class="navbar-container">
+    <!-- Logo -->
+    <a routerLink="/" class="logo">
+      <img src="assets/logo.png" alt="JobTrack Logo">
+    </a>
+
+    <!-- Desktop Menu -->
+    <div class="nav-links">
+      <ng-container *ngIf="!authService.isLoggedIn(); else authenticatedMenu">
+        <a routerLink="/login" class="nav-link">Login</a>
+        <a routerLink="/register" class="nav-link">Register</a>
+      </ng-container>
+
+      <ng-template #authenticatedMenu>
+        <div class="user-menu">
+          <div class="avatar" (click)="toggleMenu()">
+            <img src="https://cdn-icons-png.flaticon.com/512/1253/1253756.png" alt="User Avatar">
+          </div>
+          <div class="dropdown-menu" [class.show]="showMenu">
+            <a routerLink="/settings" class="dropdown-item">
+              <mat-icon>settings</mat-icon> Settings
+            </a>
+            <a routerLink="/my-jobs" class="dropdown-item">
+              <mat-icon>work</mat-icon> My Job Offers
+            </a>
+            
+            <a routerLink="/job-offers/create" class="dropdown-item">
+              <mat-icon>post_add</mat-icon> Create Job Offer
+            </a>
+            <a routerLink="/company/create" class="dropdown-item">
+              <mat-icon>business</mat-icon> Add Company
+            </a>
+            <div *ngIf="authService.isAdmin()" class="admin-section">
+              <a routerLink="/admin" class="dropdown-item">
+                <mat-icon>admin_panel_settings</mat-icon> Admin Panel
+              </a>
+            </div>
+            <div class="dropdown-divider"></div>
+            <a (click)="logout()" class="dropdown-item">
+              <mat-icon>logout</mat-icon> Logout
+            </a>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+
+    <!-- Mobile Menu Toggle -->
+    <button mat-icon-button class="mobile-menu-button" (click)="toggleMobileMenu()">
+      <mat-icon>menu</mat-icon>
+    </button>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" [class.show]="showMobileMenu">
+    <a routerLink="/login" class="mobile-nav-link" *ngIf="!authService.isLoggedIn()">Login</a>
+    <a routerLink="/register" class="mobile-nav-link" *ngIf="!authService.isLoggedIn()">Register</a>
+    
+    <ng-container *ngIf="authService.isLoggedIn()">
+      <a routerLink="/settings" class="mobile-nav-link">
+        <mat-icon>settings</mat-icon> Settings
+      </a>
+      <a routerLink="/my-jobs" class="mobile-nav-link">
+        <mat-icon>work</mat-icon> My Jobs
+      </a>
+      <a routerLink="/create-job" class="mobile-nav-link">
+        <mat-icon>post_add</mat-icon> Create Job
+      </a>
+      <a routerLink="/add-company" class="mobile-nav-link">
+        <mat-icon>business</mat-icon> Add Company
+      </a>
+      <a routerLink="/admin" class="mobile-nav-link" *ngIf="authService.isAdmin()">
+        <mat-icon>admin_panel_settings</mat-icon> Admin
+      </a>
+      <a (click)="logout()" class="mobile-nav-link">
+        <mat-icon>logout</mat-icon> Logout
+      </a>
+    </ng-container>
+  </div>
+</nav>
