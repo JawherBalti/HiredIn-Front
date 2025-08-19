@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { Auth } from '../../services/auth';
 import { Router, RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
@@ -14,25 +14,52 @@ import { Subscription } from 'rxjs';
     CommonModule, // This provides *ngIf
     RouterModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
   ],
   templateUrl: './navbar.html',
-  styleUrl: './navbar.css'
+  styleUrl: './navbar.css',
 })
-
 export class Navbar implements OnInit {
   showMenu = false;
   showMobileMenu = false;
   unreadCount = 0;
   private countSubscription!: Subscription;
 
-  constructor(private notifService: NotificationService, public authService: Auth, private router: Router) {}
+  constructor(
+    private notifService: NotificationService,
+    public authService: Auth,
+    private router: Router
+  ) {}
 
+  @HostListener('document:click', ['$event'])
+  onClick(event: MouseEvent) {
+    // Check if click was outside the menu elements
+    const userMenu = document.querySelector('.user-menu');
+    const mobileMenuButton = document.querySelector('.mobile-menu-button');
+
+    if (this.showMenu && userMenu && !userMenu.contains(event.target as Node)) {
+      this.showMenu = false;
+    }
+
+    if (
+      this.showMobileMenu &&
+      mobileMenuButton &&
+      !mobileMenuButton.contains(event.target as Node)
+    ) {
+      // Also check if click wasn't inside the mobile menu itself
+      const mobileMenu = document.querySelector('.mobile-menu');
+      if (mobileMenu && !mobileMenu.contains(event.target as Node)) {
+        this.showMobileMenu = false;
+      }
+    }
+  }
 
   ngOnInit(): void {
-    this.countSubscription = this.notifService.unreadCount$.subscribe(count => {
-      this.unreadCount = count;
-    });
+    this.countSubscription = this.notifService.unreadCount$.subscribe(
+      (count) => {
+        this.unreadCount = count;
+      }
+    );
   }
 
   ngOnDestroy(): void {
@@ -48,6 +75,11 @@ export class Navbar implements OnInit {
     this.showMobileMenu = !this.showMobileMenu;
   }
 
+  closeMenu(): void {
+    this.showMenu = false;
+    this.showMobileMenu = false;
+  }
+
   logout(): void {
     this.authService.logout().subscribe({
       next: () => {
@@ -57,7 +89,7 @@ export class Navbar implements OnInit {
       },
       error: (err) => {
         console.error('Logout failed:', err);
-      }
+      },
     });
   }
 
@@ -68,7 +100,7 @@ export class Navbar implements OnInit {
       },
       error: (err) => {
         console.error('Error fetching unread count:', err);
-      }
+      },
     });
   }
 }
