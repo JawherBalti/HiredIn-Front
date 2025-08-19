@@ -1,11 +1,96 @@
-<div class="notifications-dropdown">
-    <!-- <button (click)="markAsRead()" *ngIf="unreadCount > 0">
-        Mark all as read
-    </button> -->
-    
-    <div *ngFor="let notification of notifications" 
-         [class.unread]="!notification.read_at">
-        <p>{{ notification.data.message }}</p>
-        <small>{{ notification.created_at }}</small>
+<!-- notifications.html -->
+<div class="notifications-container">
+  <div class="header">
+    <h2>Notifications</h2>
+    <button mat-icon-button (click)="fetchNotifications()" matTooltip="Refresh">
+      <mat-icon>refresh</mat-icon>
+    </button>
+    <button
+      mat-button
+      color="primary"
+      (click)="markAllAsRead()"
+      *ngIf="unreadCount > 0"
+      [disabled]="markAllLoading"
+    >
+      <span *ngIf="!markAllLoading">Mark all as read</span>
+      <span *ngIf="markAllLoading">
+        <mat-spinner diameter="20" strokeWidth="2"></mat-spinner>
+      </span>
+    </button>
+  </div>
+
+  <div class="loading-overlay active" *ngIf="isLoading">
+    <div class="spinner"></div>
+  </div>
+
+  <div class="notifications-list" *ngIf="!isLoading">
+    <!-- Unread Notifications Section -->
+    <div
+      class="notification-section"
+      *ngIf="notifications['unread']?.length > 0"
+    >
+      <h3 class="section-title">Unread</h3>
+      <div
+        class="notification-item unread"
+        *ngFor="let notification of notifications['unread']"
+      >
+        <div class="notification-content">
+          <mat-icon class="notification-icon">notifications_active</mat-icon>
+          <div>
+            <p class="notification-message">{{ notification.data.message }}</p>
+            <span class="notification-time">{{
+              notification.created_at | dateAgo
+            }}</span>
+          </div>
+        </div>
+        <button
+          mat-icon-button
+          (click)="markAsRead(notification.id)"
+          [disabled]="loadingStates[notification.id]"
+        >
+          <mat-icon *ngIf="!loadingStates[notification.id]"
+            >check_circle</mat-icon
+          >
+          <mat-spinner
+            *ngIf="loadingStates[notification.id]"
+            diameter="24"
+          ></mat-spinner>
+        </button>
+      </div>
     </div>
+
+    <!-- Read Notifications Section -->
+    <div class="notification-section" *ngIf="notifications['read']?.length > 0">
+      <h3 class="section-title">Read</h3>
+      <div
+        class="notification-item read"
+        *ngFor="let notification of notifications['read']"
+      >
+        <div class="notification-content">
+          <mat-icon class="notification-icon">notifications</mat-icon>
+          <div>
+            <p class="notification-message">{{ notification.data.message }}</p>
+            <span class="notification-time">{{
+              notification.created_at | dateAgo
+            }}</span>
+          </div>
+        </div>
+        <button mat-icon-button disabled>
+          <mat-icon>check_circle</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div
+      class="empty-state"
+      *ngIf="
+        notifications['unread']?.length === 0 &&
+        notifications['read']?.length === 0
+      "
+    >
+      <mat-icon class="empty-icon">notifications_off</mat-icon>
+      <p>No notifications yet</p>
+    </div>
+  </div>
 </div>
