@@ -119,6 +119,15 @@
   text-decoration: none;
 }
 
+.unread-count {
+  background-color: red;
+  border-radius: 50%;
+  color: white;
+  font-weight: bold;
+  font-size: 10px;
+  padding: 2px 5px;
+}
+
 /* Responsive styles */
 @media (max-width: 768px) {
   .nav-links {

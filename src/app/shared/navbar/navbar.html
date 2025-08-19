@@ -13,6 +13,10 @@
       </ng-container>
 
       <ng-template #authenticatedMenu>
+        <div routerLink="/notifications" class="unread-count-container">
+          <mat-icon class="notification-icon">notifications_active</mat-icon>
+          <span class="unread-count">{{unreadCount}}</span>
+        </div>
         <div class="user-menu">
           <div class="avatar" (click)="toggleMenu()">
             <img src="https://cdn-icons-png.flaticon.com/512/1253/1253756.png" alt="User Avatar">
@@ -24,7 +28,7 @@
             <a routerLink="/my-jobs" class="dropdown-item">
               <mat-icon>work</mat-icon> My Job Offers
             </a>
-            
+
             <a routerLink="/job-offers/create" class="dropdown-item">
               <mat-icon>post_add</mat-icon> Create Job Offer
             </a>
@@ -55,7 +59,7 @@
   <div class="mobile-menu" [class.show]="showMobileMenu">
     <a routerLink="/login" class="mobile-nav-link" *ngIf="!authService.isLoggedIn()">Login</a>
     <a routerLink="/register" class="mobile-nav-link" *ngIf="!authService.isLoggedIn()">Register</a>
-    
+
     <ng-container *ngIf="authService.isLoggedIn()">
       <a routerLink="/settings" class="mobile-nav-link">
         <mat-icon>settings</mat-icon> Settings
