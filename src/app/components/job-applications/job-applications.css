@@ -127,3 +127,134 @@
   border-radius: 4px;
   border-left: 4px solid #e74c3c;
 }
+
+/* src/app/components/job-applications/job-applications.css */
+.interview-section {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+}
+
+.interview-details {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+/* src/app/components/job-applications/job-applications.css */
+.interview-section {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+}
+
+.interview-details {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.applications-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.application-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.job-info, .applicant-info {
+  margin-bottom: 15px;
+}
+
+.application-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 15px 0;
+}
+
+.status-actions {
+  min-width: 200px;
+}
+
+.status-pending {
+  color: #ff9800;
+}
+
+.status-rejected {
+  color: #f44336;
+}
+
+.status-accepted {
+  color: #4caf50;
+}
+
+.interview-section {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+.interview-details {
+  margin-top: 15px;
+  padding: 15px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+}
+
+.interview-status-scheduled {
+  color: #2196f3;
+}
+
+.interview-status-completed {
+  color: #4caf50;
+}
+
+.interview-status-canceled {
+  color: #f44336;
+}
+
+.cover-letter {
+  margin-top: 15px;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border-left: 4px solid #2196f3;
+}
+
+.back-button {
+  margin-right: 10px;
+}
+
+.alert {
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid #f44336;
+  border-radius: 4px;
+  color: #f44336;
+  background-color: #ffebee;
+}
+
+.no-applications {
+  text-align: center;
+  padding: 20px;
+  color: #757575;
+}
