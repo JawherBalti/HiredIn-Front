@@ -192,9 +192,8 @@
   margin-bottom: 2rem;
 }
 
-.landing-footer .footer-content .footer-logo h2 {
-  margin: 0;
-  font-size: 1.8rem;
+.landing-footer .footer-content .footer-logo img {
+  width: 200px
 }
 
 .landing-footer .footer-content .footer-logo p {

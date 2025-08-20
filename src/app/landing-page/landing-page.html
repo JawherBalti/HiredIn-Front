@@ -1,91 +1,153 @@
 <div class="landing-container">
-<!-- Hero Section -->
-<section class="hero-section">
-  <div class="hero-container">
-    <div class="hero-text">
-      <h1 class="hero-title">Streamline Your <span class="highlight">Job Search</span></h1>
-      <p class="hero-subtitle">Organize applications, track progress, and land your dream job faster</p>
-      <div class="hero-cta">
-        <button mat-raised-button color="primary" class="cta-button" (click)="handleGetStarted()">
-          Get Started For Free
-        </button>
-        <button mat-stroked-button color="primary" class="secondary-button">
-          See How It Works
-        </button>
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-container">
+      <div class="hero-text">
+        <h1 class="hero-title">
+          Streamline Your <span class="highlight">Job Search</span>
+        </h1>
+        <p class="hero-subtitle">
+          Organize applications, track progress, and land your dream job faster
+        </p>
+        <div class="hero-cta">
+          <button
+            mat-raised-button
+            color="primary"
+            class="cta-button"
+            (click)="handleGetStarted()"
+          >
+            Get Started For Free
+          </button>
+          <button mat-stroked-button color="primary" class="secondary-button">
+            See How It Works
+          </button>
+        </div>
+      </div>
+      <div class="hero-image">
+        <img
+          src="../../../public/assets/images/undraw_interview_yz52.svg"
+          alt=""
+        />
       </div>
     </div>
-    <div class="hero-image">
-      <img src="../../../public/assets/images/undraw_interview_yz52.svg" alt="">
-    </div>
-  </div>
-</section>
+  </section>
 
-<!-- Featured Jobs Section -->
-<section class="jobs-section">
-  <div class="section-header">
-    <h2>Featured <span class="highlight">Jobs</span></h2>
-    <p>Curated opportunities from top companies</p>
-  </div>
-  
-  <div class="carousel-container">
-    <button mat-icon-button class="nav-button prev" 
-            (click)="prevSlide()" 
-            [disabled]="currentSlide === 0">
-      <mat-icon>chevron_left</mat-icon>
-    </button>
-    
-    <div class="carousel-wrapper">
-      <div class="carousel" 
-           [style.transform]="'translateX(' + (-currentSlide * (100 / visibleSlides)) + '%)'">
-        <div *ngFor="let job of featuredJobs; let i = index" 
-             class="job-card">
-          <div class="job-badge">{{job.type}}</div>
-          <div class="job-content">
-            <div class="company-logo">
-              <img [src]="job.logo" [alt]="job.company + ' logo'">
-            </div>
-            <div class="job-info">
-              <h3>{{job.title}}</h3>
-              <p class="company">{{job.company}}</p>
-              <div class="job-meta">
-                <span class="location">
-                  <mat-icon>location_on</mat-icon>
-                  {{job.location}}
-                </span>
-                <span class="salary">
-                  <mat-icon>attach_money</mat-icon>
-                  {{job.salary}}
-                </span>
+  <!-- Featured Jobs Section -->
+  <section class="jobs-section">
+    <div class="section-header">
+      <h2>Featured <span class="highlight">Jobs</span></h2>
+      <p>Curated opportunities from top companies</p>
+    </div>
+
+    <div class="carousel-container">
+      <button
+        mat-icon-button
+        class="nav-button prev"
+        (click)="prevSlide()"
+        [disabled]="currentSlide === 0"
+      >
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+
+      <div class="carousel-wrapper">
+        <div
+          class="carousel"
+          [style.transform]="
+            'translateX(' + -currentSlide * (100 / visibleSlides) + '%)'
+          "
+        >
+          <div *ngFor="let job of featuredJobs; let i = index" class="job-card">
+            <div class="job-badge">{{ job.type }}</div>
+            <div class="job-content">
+              <div class="company-logo">
+                <img [src]="job.logo" [alt]="job.company + ' logo'" />
+              </div>
+              <div class="job-info">
+                <h3>{{ job.title }}</h3>
+                <p class="company">{{ job.company }}</p>
+                <div class="job-meta">
+                  <span class="location">
+                    <mat-icon>location_on</mat-icon>
+                    {{ job.location }}
+                  </span>
+                  <span class="salary">
+                    <mat-icon>attach_money</mat-icon>
+                    {{ job.salary }}
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="job-footer">
-            <span class="posted-date">Posted {{job.posted}} ago</span>
-            <button mat-stroked-button class="apply-button" (click)="handleQuickApply()">Quick Apply</button>
+            <div class="job-footer">
+              <span class="posted-date">Posted {{ job.posted }} ago</span>
+              <button
+                mat-stroked-button
+                class="apply-button"
+                (click)="handleQuickApply()"
+              >
+                Quick Apply
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    
-    <button mat-icon-button class="nav-button next" 
-            (click)="nextSlide()" 
-            [disabled]="currentSlide >= featuredJobs.length - visibleSlides">
-      <mat-icon>chevron_right</mat-icon>
-    </button>
-  </div>
-  <div style="display: flex; flex-direction: column; align-items: center; gap:50px">
-    <div class="carousel-indicators">
-      <button *ngFor="let _ of [].constructor(featuredJobs.length - visibleSlides + 1); let i = index" 
-              [class.active]="i === currentSlide"
-              (click)="goToSlide(i)">
+
+      <button
+        mat-icon-button
+        class="nav-button next"
+        (click)="nextSlide()"
+        [disabled]="currentSlide >= featuredJobs.length - visibleSlides"
+      >
+        <mat-icon>chevron_right</mat-icon>
       </button>
     </div>
-    <a class="see-all-link" routerLink="/job-offers">See all jobs 
+    <div
+      style="
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 50px;
+      "
+    >
+      <div class="carousel-indicators">
+        <button
+          *ngFor="
+            let _ of [].constructor(featuredJobs.length - visibleSlides + 1);
+            let i = index
+          "
+          [class.active]="i === currentSlide"
+          (click)="goToSlide(i)"
+        ></button>
+      </div>
+      <a class="see-all-link" routerLink="/job-offers"
+        >See all jobs
 
-      <svg fill="#3f51b5" width="64px" height="64px" viewBox="-1.2 -1.2 26.40 26.40" xmlns="http://www.w3.org/2000/svg" transform="matrix(1, 0, 0, 1, 0, 0)rotate(0)" stroke="#3f51b5" stroke-width="1.2"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="0.048"></g><g id="SVGRepo_iconCarrier"><path d="m11.293 17.293 1.414 1.414L19.414 12l-6.707-6.707-1.414 1.414L15.586 11H6v2h9.586z"></path></g></svg>
-    </a>
-  </div>
-</section>
+        <svg
+          fill="#3f51b5"
+          width="64px"
+          height="64px"
+          viewBox="-1.2 -1.2 26.40 26.40"
+          xmlns="http://www.w3.org/2000/svg"
+          transform="matrix(1, 0, 0, 1, 0, 0)rotate(0)"
+          stroke="#3f51b5"
+          stroke-width="1.2"
+        >
+          <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+          <g
+            id="SVGRepo_tracerCarrier"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke="#CCCCCC"
+            stroke-width="0.048"
+          ></g>
+          <g id="SVGRepo_iconCarrier">
+            <path
+              d="m11.293 17.293 1.414 1.414L19.414 12l-6.707-6.707-1.414 1.414L15.586 11H6v2h9.586z"
+            ></path>
+          </g>
+        </svg>
+      </a>
+    </div>
+  </section>
 
   <!-- Testimonials Section -->
   <section class="testimonials-section">
@@ -93,14 +155,14 @@
     <div class="testimonials-grid">
       <div *ngFor="let testimonial of testimonials" class="testimonial-card">
         <div class="rating">
-          <span *ngFor="let star of [1,2,3,4,5]">★</span>
+          <span *ngFor="let star of [1, 2, 3, 4, 5]">★</span>
         </div>
-        <p class="testimonial-text">"{{testimonial.text}}"</p>
+        <p class="testimonial-text">"{{ testimonial.text }}"</p>
         <div class="user-info">
-          <img [src]="testimonial.avatar" alt="User avatar" class="avatar">
+          <img [src]="testimonial.avatar" alt="User avatar" class="avatar" />
           <div>
-            <p class="user-name">{{testimonial.name}}</p>
-            <p class="user-title">{{testimonial.title}}</p>
+            <p class="user-name">{{ testimonial.name }}</p>
+            <p class="user-title">{{ testimonial.title }}</p>
           </div>
         </div>
       </div>
@@ -111,7 +173,7 @@
   <footer class="landing-footer">
     <div class="footer-content">
       <div class="footer-logo">
-        <h2>JobTrack</h2>
+        <img src="assets/images/hiredin_logo.PNG" alt="HiredIn Logo" />
         <p>Your career companion</p>
       </div>
       <div class="footer-links">
@@ -136,7 +198,7 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <p>&copy; {{currentYear}} JobTrack. All rights reserved.</p>
+      <p>&copy; {{ currentYear }} HiredIn. All rights reserved.</p>
     </div>
   </footer>
 </div>
