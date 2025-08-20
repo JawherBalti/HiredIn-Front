@@ -9,6 +9,8 @@ import { RouterLink } from '@angular/router';
 import { DateAgoPipe } from '../../date-ago-pipe';
 import { Auth } from '../../services/auth';
 import { ResumeService } from '../../services/resume';
+import { Interview } from '../../models/interview.model';
+import { InterviewService } from '../../services/interview';
 
 @Component({
   selector: 'app-job-offer-list',
@@ -27,6 +29,7 @@ import { ResumeService } from '../../services/resume';
 
 export class JobOfferList implements OnInit {
   jobOffers: JobOfferModel[] = [];
+  interviews: Interview[] = []; // Update the type
   appliedJobs: any[] = []; // Add this line for storing applied jobs
   filteredJobs: { [status: string]: JobOfferModel[] } = {};
   statuses = ['offer', 'applied', 'interview'];
@@ -35,13 +38,21 @@ export class JobOfferList implements OnInit {
   activeStatus = 'offer'; // Default active tab
   jobCategory: string = 'Offers';
   currentUser: any = null;
+  currentUserId: any = null;
 
-  constructor(private resumeService: ResumeService, private jobOfferService: JobOfferService, private authService: Auth) { }
+  constructor(
+    private resumeService: ResumeService,
+    private jobOfferService: JobOfferService,
+    private interviewService: InterviewService,
+    private authService: Auth
+  ) { }
 
   ngOnInit(): void {
+    this.currentUser = this.authService.getCurrentUser();
+    this.currentUserId = this.authService.getCurrentUser().id;
     this.loadJobOffers();
     this.loadAppliedJobs(); // Load applied jobs on init
-    this.currentUser = this.authService.getCurrentUser();
+    this.loadInterviews(this.currentUserId);
   }
 
   isJobCreator(jobOffer: any): boolean {
@@ -61,10 +72,40 @@ export class JobOfferList implements OnInit {
         break;
       case 'interview':
         this.jobCategory = 'Interviews';
+        // Map interviews to job offers format when switching to interview tab
+        this.filteredJobs['interview'] = this.mapInterviewsToJobOffers(this.interviews);
         break;
       default:
         this.jobCategory = 'Offers';
     }
+  }
+
+    loadInterviews(userId: number): void {
+    this.interviewService.getInterviewsByApplicant(userId).subscribe({
+      next: (interviews) => {
+        this.interviews = interviews;
+        console.log(interviews)
+        if (this.activeStatus === 'interview') {
+          this.filteredJobs['interview'] = this.mapInterviewsToJobOffers(interviews);
+        }
+      },
+      error: (error) => {
+        this.errorMessage = 'Failed to load interviews';
+        console.error('Error loading interviews:', error);
+      }
+    });
+  }
+
+    private mapInterviewsToJobOffers(interviews: Interview[]): any[] {
+    return interviews.map(interview => ({
+      ...interview.job_offer,
+      interview_details: {
+        id: interview.id,
+        scheduled_time: interview.scheduled_time,
+        location: interview.location,
+        status: interview.status
+      }
+    }));
   }
 
   loadAppliedJobs(): void {
