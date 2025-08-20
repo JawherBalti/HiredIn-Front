@@ -39,9 +39,9 @@ export class LandingPage {
 
   updateVisibleSlides() {
     if (window.innerWidth < 768) {
-      this.visibleSlides = 1;
+      this.visibleSlides = 3;
     } else if (window.innerWidth < 992) {
-      this.visibleSlides = 2;
+      this.visibleSlides = 3;
     } else {
       this.visibleSlides = 3;
     }
