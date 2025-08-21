@@ -56,29 +56,29 @@
             'translateX(' + -currentSlide * (100 / visibleSlides) + '%)'
           "
         >
-          <div *ngFor="let job of featuredJobs; let i = index" class="job-card">
-            <div class="job-badge">{{ job.type }}</div>
+          <div *ngFor="let job of jobOffers; let i = index" class="job-card">
+            <div class="job-badge">{{ job?.type }}</div>
             <div class="job-content">
               <div class="company-logo">
-                <img [src]="job.logo" [alt]="job.company + ' logo'" />
+                <img [src]="job?.company?.logo_url" [alt]="job.company + ' logo'" />
               </div>
               <div class="job-info">
-                <h3>{{ job.title }}</h3>
-                <p class="company">{{ job.company }}</p>
+                <h3>{{ job?.title }}</h3>
+                <p class="company">{{ job?.company?.name }}</p>
                 <div class="job-meta">
                   <span class="location">
                     <mat-icon>location_on</mat-icon>
-                    {{ job.location }}
+                    {{ job?.location }}
                   </span>
                   <span class="salary">
                     <mat-icon>attach_money</mat-icon>
-                    {{ job.salary }}
+                    {{ job?.salary }}
                   </span>
                 </div>
               </div>
             </div>
             <div class="job-footer">
-              <span class="posted-date">Posted {{ job.posted }} ago</span>
+              <span class="posted-date">Posted {{ job?.created_at! | dateAgo }}</span>
               <button
                 mat-stroked-button
                 class="apply-button"

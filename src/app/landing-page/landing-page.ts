@@ -1,9 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon'; // <-- Add this
 import { MatButtonModule } from '@angular/material/button'; // If using buttons
 import { Auth } from '../services/auth';
 import { RouterModule } from '@angular/router';
+import { JobOfferService } from '../services/job-offer';
+import { JobOfferModel } from '../models/job-offer.model';
+import { DateAgoPipe } from '../date-ago-pipe';
 
 @Component({
   selector: 'app-landing-page',
@@ -12,16 +15,33 @@ import { RouterModule } from '@angular/router';
     CommonModule,
     RouterModule,
     MatIconModule, // <-- Add here
-    MatButtonModule // If using mat-button
+    MatButtonModule, // If using mat-button
+    DateAgoPipe
   ],
   templateUrl: './landing-page.html',
   styleUrls: ['./landing-page.css']
 })
-export class LandingPage {
+export class LandingPage implements OnInit {
 
-  constructor(private authService: Auth) {
+  jobOffers: JobOfferModel[] = []
+
+  constructor(
+    private authService: Auth,
+    private jobOfferService: JobOfferService
+  ) {
     this.updateVisibleSlides();
     window.addEventListener('resize', () => this.updateVisibleSlides());
+  }
+
+  ngOnInit(): void {
+    this.jobOfferService.getRecentJobOffers().subscribe({
+      next: (offers) => {
+        this.jobOffers = offers
+      },
+      error: err => {
+        console.log(err)
+      }
+    })
   }
 
   handleGetStarted() {
