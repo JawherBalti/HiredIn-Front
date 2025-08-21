@@ -1,6 +1,11 @@
 import { Component } from '@angular/core';
-import {OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { OnInit } from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { CompanyService } from '../../services/company';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CompanyModel } from '../../models/company.model';
@@ -21,10 +26,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatFormFieldModule,
   ],
   templateUrl: './company-form.html',
-  styleUrl: './company-form.css'
+  styleUrl: './company-form.css',
 })
-
-
 export class CompanyForm implements OnInit {
   companyForm: FormGroup;
   isEditMode = false;
@@ -42,39 +45,25 @@ export class CompanyForm implements OnInit {
       name: ['', Validators.required],
       website: ['', [Validators.pattern('https?://.+')]],
       industry: [''],
-      description: ['']
+      description: [''],
+      image: [null, Validators.required],
     });
   }
 
-  ngOnInit(): void {
-    
-  }
+  ngOnInit(): void {}
+
   goBack(): void {
     this.location.back();
   }
 
-  // ngOnInit(): void {
-  //   this.route.paramMap.pipe(
-  //     map(params => params.get('id')),
-  //     switchMap(id => {
-  //       if (id) {
-  //         this.isEditMode = true;
-  //         this.currentCompanyId = +id;
-  //         return this.companyService.getCompany(+id);
-  //       }
-  //       return new Observable<CompanyModel>(subscriber => subscriber.next());
-  //     })
-  //   ).subscribe(company => {
-  //     if (company) {
-  //       this.companyForm.patchValue({
-  //         name: company.name,
-  //         website: company.website,
-  //         industry: company.industry,
-  //         description: company.description
-  //       });
-  //     }
-  //   });
-  // }
+  select(e: any) {
+    const file = e.target.files[0];
+    if (file) {
+      this.companyForm.patchValue({
+        image: file,
+      });
+    }
+  }
 
   onSubmit(): void {
     if (this.companyForm.invalid) {
@@ -85,34 +74,63 @@ export class CompanyForm implements OnInit {
     this.loading = true;
     this.errorMessage = '';
 
-    const companyData: CompanyModel = {
-      name: this.companyForm.value.name,
-      website: this.companyForm.value.website,
-      industry: this.companyForm.value.industry,
-      description: this.companyForm.value.description
-    };
+    const file = this.companyForm.get('image')?.value;
+    const cloudinaryUrl = 'https://api.cloudinary.com/v1_1/dv1lhvgjr/upload';
 
-    const request: Observable<CompanyModel> = this.isEditMode && this.currentCompanyId
-      ? this.companyService.updateCompany(this.currentCompanyId, companyData)
-      : this.companyService.createCompany(companyData);
+    const formData = new FormData();
 
-    request.subscribe({
-      next: () => {
-        this.loading = false;
-        this.router.navigate(['/'], {
-          state: { success: true, message: this.isEditMode ? 'Company updated successfully!' : 'Company created successfully!' }
-        });
-      },
-      error: (err) => {
-        this.loading = false;
-        this.errorMessage = err.error?.message || 'An error occurred. Please try again.';
-        console.error('Company operation failed:', err);
-      }
-    });
+    // Add Cloudinary-specific parameters
+    formData.append('file', file);
+    formData.append('upload_preset', 'eiqxfhzq');
+
+    fetch(cloudinaryUrl, {
+      method: 'POST',
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.secure_url) {
+          const companyData: CompanyModel = {
+            name: this.companyForm.value.name,
+            website: this.companyForm.value.website,
+            industry: this.companyForm.value.industry,
+            description: this.companyForm.value.description,
+            logo_url: data.secure_url,
+          };
+
+          const request: Observable<CompanyModel> =
+            this.isEditMode && this.currentCompanyId
+              ? this.companyService.updateCompany(
+                  this.currentCompanyId,
+                  companyData
+                )
+              : this.companyService.createCompany(companyData);
+
+          request.subscribe({
+            next: () => {
+              this.loading = false;
+              this.router.navigate(['/'], {
+                state: {
+                  success: true,
+                  message: this.isEditMode
+                    ? 'Company updated successfully!'
+                    : 'Company created successfully!',
+                },
+              });
+            },
+            error: (err) => {
+              this.loading = false;
+              this.errorMessage =
+                err.error?.message || 'An error occurred. Please try again.';
+              console.error('Company operation failed:', err);
+            },
+          });
+        }
+      });
   }
 
   private markFormGroupTouched(formGroup: FormGroup) {
-    Object.values(formGroup.controls).forEach(control => {
+    Object.values(formGroup.controls).forEach((control) => {
       control.markAsTouched();
 
       if (control instanceof FormGroup) {
