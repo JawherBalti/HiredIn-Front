@@ -4,6 +4,8 @@ export interface CompanyModel {
   website?: string;
   industry?: string;
   description?: string;
-  logo?: string;
+  logo_url?: string;
+  logo_public_id?: string;
   created_at?: string;
+  updated_at?: string;
 }
