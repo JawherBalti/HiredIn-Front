@@ -10,13 +10,15 @@ interface LoginResponse {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-
 export class Auth {
   private apiUrl = 'http://localhost:8000/api'; // Your Laravel API URL
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
   isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
+
+  private loginStatus = new BehaviorSubject<boolean>(this.isLoggedIn());
+  public loginStatus$ = this.loginStatus.asObservable();
 
   constructor(private http: HttpClient, private router: Router) {
     this.checkAuthStatus();
@@ -30,7 +32,7 @@ export class Auth {
   register(userData: any) {
     return this.http.post(`${this.apiUrl}/register`, userData).pipe(
       tap((response: any) => {
-        console.log(response)
+        console.log(response);
       })
     );
   }
@@ -39,19 +41,27 @@ export class Auth {
     return this.http.post(`${this.apiUrl}/login`, credentials).pipe(
       tap((response: any) => {
         this.storeAuthData(response);
+        this.loginStatus.next(true); // Notify that login was successful
       })
     );
   }
 
   logout() {
-    return this.http.post(`${this.apiUrl}/logout`, {}, {
-      headers: this.getAuthHeaders()
-    }).pipe(
-      tap(() => {
-        this.clearAuthData();
-        this.router.navigate(['/login']);
-      })
-    );
+    return this.http
+      .post(
+        `${this.apiUrl}/logout`,
+        {},
+        {
+          headers: this.getAuthHeaders(),
+        }
+      )
+      .pipe(
+        tap(() => {
+          this.clearAuthData();
+          this.loginStatus.next(false); // Notify that logout occurred
+          this.router.navigate(['/login']);
+        })
+      );
   }
 
   private storeAuthData(response: LoginResponse) {
@@ -74,7 +84,7 @@ export class Auth {
 
   getAuthHeaders() {
     return {
-      'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+      Authorization: `Bearer ${localStorage.getItem('auth_token')}`,
     };
   }
 
@@ -91,8 +101,8 @@ export class Auth {
     if (this.isLoggedIn()) {
       this.router.navigate([redirectUrl]);
     } else {
-      this.router.navigate([fallbackUrl], { 
-        queryParams: { returnUrl: redirectUrl } 
+      this.router.navigate([fallbackUrl], {
+        queryParams: { returnUrl: redirectUrl },
       });
     }
   }

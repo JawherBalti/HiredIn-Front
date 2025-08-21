@@ -24,6 +24,7 @@ export class Navbar implements OnInit {
   showMobileMenu = false;
   unreadCount = 0;
   private countSubscription!: Subscription;
+  private loginSubscription!: Subscription;
 
   constructor(
     private notifService: NotificationService,
@@ -60,13 +61,30 @@ export class Navbar implements OnInit {
         this.unreadCount = count;
       }
     );
+
+    // Listen for login events
+    this.loginSubscription = this.authService.loginStatus$.subscribe(
+      (isLoggedIn) => {
+        if (isLoggedIn) {
+          // Fetch notifications when user logs in
+          this.fetchUnreadCount();
+        } else {
+          // Reset count when user logs out
+          this.unreadCount = 0;
+        }
+      }
+    );
   }
 
   ngOnDestroy(): void {
     if (this.countSubscription) {
       this.countSubscription.unsubscribe();
     }
+    if (this.loginSubscription) {
+      this.loginSubscription.unsubscribe();
+    }
   }
+
   toggleMenu(): void {
     this.showMenu = !this.showMenu;
   }
