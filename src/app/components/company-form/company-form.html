@@ -1,12 +1,33 @@
 <div class="company-form-container">
-  <h2>{{ isEditMode ? 'Edit' : 'Create' }} Company</h2>
+  <h2>{{ isEditMode ? "Edit" : "Create" }} Company</h2>
   <form [formGroup]="companyForm" (ngSubmit)="onSubmit()">
     <div class="form-grid">
+      <div class="form-group">
+        <label for="logo" class="form-label">Company Logo</label>
+        <input
+          name="cover"
+          (change)="select($event)"
+          type="file"
+          class="form-control m-1"
+          placeholder="image"
+        />
+      </div>
       <!-- Company Name -->
       <div class="form-group">
         <label for="name" class="form-label">Company Name *</label>
-        <input type="text" class="form-control" id="name" formControlName="name" placeholder="e.g. Tech Corp Inc.">
-        <div *ngIf="companyForm.get('name')?.invalid && companyForm.get('name')?.touched" class="validation-error">
+        <input
+          type="text"
+          class="form-control"
+          id="name"
+          formControlName="name"
+          placeholder="e.g. Tech Corp Inc."
+        />
+        <div
+          *ngIf="
+            companyForm.get('name')?.invalid && companyForm.get('name')?.touched
+          "
+          class="validation-error"
+        >
           Company name is required
         </div>
       </div>
@@ -14,8 +35,20 @@
       <!-- Website -->
       <div class="form-group">
         <label for="website" class="form-label">Website</label>
-        <input type="url" class="form-control" id="website" formControlName="website" placeholder="https://example.com">
-        <div *ngIf="companyForm.get('website')?.invalid && companyForm.get('website')?.touched" class="validation-error">
+        <input
+          type="url"
+          class="form-control"
+          id="website"
+          formControlName="website"
+          placeholder="https://example.com"
+        />
+        <div
+          *ngIf="
+            companyForm.get('website')?.invalid &&
+            companyForm.get('website')?.touched
+          "
+          class="validation-error"
+        >
           Please enter a valid URL
         </div>
       </div>
@@ -37,15 +70,24 @@
       <!-- Description -->
       <div class="form-group full-width">
         <label for="description" class="form-label">Description</label>
-        <textarea class="form-control" id="description" formControlName="description" rows="3"
-          placeholder="Brief description about the company"></textarea>
+        <textarea
+          class="form-control"
+          id="description"
+          formControlName="description"
+          rows="3"
+          placeholder="Brief description about the company"
+        ></textarea>
       </div>
     </div>
 
     <!-- Form Actions -->
     <div class="form-actions">
-      <button type="submit" class="btn btn-primary" [disabled]="!companyForm.valid">
-        {{ isEditMode ? 'Update' : 'Create' }} Company
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="!companyForm.valid"
+      >
+        {{ isEditMode ? "Update" : "Create" }} Company
       </button>
       <button (click)="goBack()" class="btn btn-secondary">Cancel</button>
     </div>
