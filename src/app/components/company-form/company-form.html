@@ -85,11 +85,26 @@
       <button
         type="submit"
         class="btn btn-primary"
-        [disabled]="!companyForm.valid"
+        [disabled]="loading || !companyForm.valid"
       >
-        {{ isEditMode ? "Update" : "Create" }} Company
+        <!-- Show spinner when loading, otherwise show text -->
+        <mat-spinner
+          *ngIf="loading"
+          diameter="20"
+          class="button-spinner"
+        ></mat-spinner>
+        <span *ngIf="!loading">
+          {{ isEditMode ? "Update" : "Create" }} Company
+        </span>
       </button>
-      <button (click)="goBack()" class="btn btn-secondary">Cancel</button>
+      <button
+        type="button"
+        (click)="goBack()"
+        class="btn btn-secondary"
+        [disabled]="loading"
+      >
+        Cancel
+      </button>
     </div>
   </form>
 </div>

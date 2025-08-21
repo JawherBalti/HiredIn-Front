@@ -7,14 +7,14 @@ import {
   Validators,
 } from '@angular/forms';
 import { CompanyService } from '../../services/company';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { CompanyModel } from '../../models/company.model';
 import { Observable } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
 import { CommonModule, Location } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-company-form',
@@ -24,6 +24,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatButtonModule,
     MatInputModule,
     MatFormFieldModule,
+    MatProgressSpinnerModule, // Add this to imports
   ],
   templateUrl: './company-form.html',
   styleUrl: './company-form.css',
