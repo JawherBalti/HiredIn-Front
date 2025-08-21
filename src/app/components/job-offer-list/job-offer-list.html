@@ -51,7 +51,7 @@
         <div class="company-logo">
           <img
             [src]="
-              job?.company?.logo ||
+              job?.company?.logo_url ||
               'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlm0t5PrvJkY1Mnh8pMH1l0eTXgTbvLetn7g&s'
             "
             [alt]="job.company?.name + ' logo'"
@@ -109,7 +109,7 @@
           <div class="job-content">
             <div class="company-logo">
               <img
-                [src]="job?.company?.logo || 'default-logo.png'"
+                [src]="job?.company?.logo_url || 'default-logo.png'"
                 [alt]="job.company?.name + ' logo'"
               />
             </div>
