@@ -22,18 +22,18 @@
             <img src="https://cdn-icons-png.flaticon.com/512/1253/1253756.png" alt="User Avatar">
           </div>
           <div class="dropdown-menu" [class.show]="showMenu">
-            <a (click)="closeMenu()" routerLink="/settings" class="dropdown-item">
-              <mat-icon>settings</mat-icon> Settings
+            <a (click)="closeMenu()" routerLink="/job-offers" class="dropdown-item">
+              <mat-icon>work</mat-icon>Job Offers
             </a>
-            <a (click)="closeMenu()" routerLink="/my-jobs" class="dropdown-item">
-              <mat-icon>work</mat-icon> My Job Offers
-            </a>
-
+            
             <a (click)="closeMenu()" routerLink="/job-offers/create" class="dropdown-item">
               <mat-icon>post_add</mat-icon> Create Job Offer
             </a>
             <a (click)="closeMenu()" routerLink="/company/create" class="dropdown-item">
               <mat-icon>business</mat-icon> Add Company
+            </a>
+            <a (click)="closeMenu()" routerLink="/settings" class="dropdown-item">
+              <mat-icon>settings</mat-icon> Settings
             </a>
             <div *ngIf="authService.isAdmin()" class="admin-section">
               <a routerLink="/admin" class="dropdown-item">
