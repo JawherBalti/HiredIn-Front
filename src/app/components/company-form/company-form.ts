@@ -33,7 +33,7 @@ export class CompanyForm implements OnInit {
   companyForm: FormGroup;
   isEditMode = false;
   currentCompanyId: number | null = null;
-  loading = false;
+  loading = false
   errorMessage = '';
 
   constructor(
