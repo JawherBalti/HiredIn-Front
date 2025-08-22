@@ -2,10 +2,14 @@
   <h2>
     <button mat-icon-button class="back-button" (click)="goBack()">
       <mat-icon>arrow_back</mat-icon>
-    </button> Job Applications
+    </button>
+    Job Applications
   </h2>
 
-  <div *ngIf="isLoading">Loading applications...</div>
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-overlay active">
+    <div class="spinner"></div>
+  </div>
   <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
 
   <div *ngIf="!isLoading && applications.length === 0" class="no-applications">
@@ -16,14 +20,15 @@
     <div class="job-info">
       <h3>{{ app.job_offer.title }}</h3>
       <p>Job description: {{ app.job_offer.description }}</p>
-      <p>Ends on: {{ app.job_offer.deadline | date:'mediumDate' }}</p>
+      <p>Ends on: {{ app.job_offer.deadline | date : "mediumDate" }}</p>
     </div>
-    
+
     <div class="applicant-info">
       <h3>{{ app.user.name }}</h3>
       <p>Email: {{ app.user.email }}</p>
-      <p>Applied on: {{ app.created_at | date:'mediumDate' }}</p>
-      <p>Status:
+      <p>Applied on: {{ app.created_at | date : "mediumDate" }}</p>
+      <p>
+        Status:
         <span [class]="'status-' + app.status">{{ app.status }}</span>
       </p>
     </div>
@@ -36,7 +41,11 @@
       <div class="status-actions">
         <mat-form-field appearance="outline">
           <mat-label>Status</mat-label>
-          <mat-select #statusSelect (valueChange)="updateStatus(app.id, statusSelect.value)" [value]="app.status">
+          <mat-select
+            #statusSelect
+            (valueChange)="updateStatus(app.id, statusSelect.value)"
+            [value]="app.status"
+          >
             <mat-option value="pending">Pending</mat-option>
             <mat-option value="rejected">Rejected</mat-option>
             <mat-option value="accepted">Accepted</mat-option>
@@ -51,17 +60,32 @@
     </div>
 
     <div *ngIf="app.status === 'accepted'" class="interview-section">
-      <button mat-raised-button color="primary" (click)="openScheduleDialog(app)">
-        <mat-icon>{{ app.interview ? 'edit_calendar' : 'calendar_today' }}</mat-icon>
-        {{ app.interview ? 'Reschedule Interview' : 'Schedule Interview' }}
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="openScheduleDialog(app)"
+      >
+        <mat-icon>{{
+          app.interview ? "edit_calendar" : "calendar_today"
+        }}</mat-icon>
+        {{ app.interview ? "Reschedule Interview" : "Schedule Interview" }}
       </button>
 
       <div *ngIf="app.interview" class="interview-details">
         <h4>Scheduled Interview:</h4>
-        <p><strong>Time:</strong> {{ app.interview.scheduled_time | date:'medium' }}</p>
-        <p><strong>Location:</strong> {{ app.interview.location || 'Not specified' }}</p>
-        <p *ngIf="app.interview.notes"><strong>Notes:</strong> {{ app.interview.notes }}</p>
-        <p><strong>Status:</strong> 
+        <p>
+          <strong>Time:</strong>
+          {{ app.interview.scheduled_time | date : "medium" }}
+        </p>
+        <p>
+          <strong>Location:</strong>
+          {{ app.interview.location || "Not specified" }}
+        </p>
+        <p *ngIf="app.interview.notes">
+          <strong>Notes:</strong> {{ app.interview.notes }}
+        </p>
+        <p>
+          <strong>Status:</strong>
           <span [class]="'interview-status-' + app.interview.status">
             {{ app.interview.status }}
           </span>
