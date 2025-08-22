@@ -1,7 +1,19 @@
 // src/app/services/interview.service.ts
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+
+export interface PaginatedInterviewsResponse {
+  data: any[];
+  pagination: {
+    current_page: number;
+    per_page: number;
+    total: number;
+    last_page: number;
+    from: number;
+    to: number;
+  };
+}
 
 @Injectable({
   providedIn: 'root'
@@ -33,7 +45,11 @@ export class InterviewService {
   }
 
   // src/app/services/interview.service.ts
-  getInterviewsByApplicant(userId: number): Observable<any> {
-      return this.http.get(`${this.apiUrl}/users/${userId}/interviews`);
+  getInterviewsByApplicant(userId: number, page: number = 1, perPage: number = 5): Observable<PaginatedInterviewsResponse> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('per_page', perPage.toString());
+
+    return this.http.get<PaginatedInterviewsResponse>(`${this.apiUrl}/users/${userId}/interviews`, { params });
   }
 }
