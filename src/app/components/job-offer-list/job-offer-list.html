@@ -25,16 +25,16 @@
     >
       {{ status | titlecase }}
       <span class="count-badge">
-        <!-- Special handling for counts -->
+        <!-- Special handling for counts
         <ng-container *ngIf="status === 'offer'">
-          ({{ filteredJobs[status]?.length || 0 }})
+          ({{ filteredJobs[status].length || 0 }})
         </ng-container>
         <ng-container *ngIf="status === 'applied'">
           ({{ appliedJobs.length || 0 }})
         </ng-container>
         <ng-container *ngIf="status === 'interview'">
           ({{ interviews.length || 0 }})
-        </ng-container>
+        </ng-container> -->
       </span>
     </button>
   </div>
@@ -170,8 +170,11 @@
         <div class="job-content">
           <div class="company-logo">
             <img
-              [src]="'default-logo.png'"
-              [alt]="interview.job_offer.company?.name + ' logo'"
+              [src]="
+                interview?.job_offer?.company?.logo_url ||
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlm0t5PrvJkY1Mnh8pMH1l0eTXgTbvLetn7g&s'
+              "
+              [alt]="interview.job_offer.company.name + ' logo'"
             />
           </div>
 
@@ -201,17 +204,141 @@
             >
               View Job
             </button>
-            <button
-              mat-stroked-button
-              class="view-button"
-            >
-              Details
-            </button>
+            <button mat-stroked-button class="view-button">Details</button>
           </div>
         </div>
       </div>
     </div>
   </ng-template>
+
+  <!-- Add this after your job cards grid, before the section-footer -->
+  <div
+    class="pagination-controls"
+    *ngIf="activeStatus === 'offer' && totalPages > 1"
+  >
+    <div class="pagination-info">
+      {{ paginationInfo }}
+    </div>
+
+    <div class="pagination-buttons">
+      <button
+        mat-stroked-button
+        (click)="previousPage()"
+        [disabled]="currentPage === 1"
+        class="pagination-button"
+      >
+        Previous
+      </button>
+
+      <div class="page-numbers">
+        <button
+          *ngFor="let page of [].constructor(totalPages); let i = index"
+          mat-stroked-button
+          (click)="goToPage(i + 1)"
+          [class.active]="currentPage === i + 1"
+          class="page-button"
+        >
+          {{ i + 1 }}
+        </button>
+      </div>
+
+      <button
+        mat-stroked-button
+        (click)="nextPage()"
+        [disabled]="currentPage === totalPages"
+        class="pagination-button"
+      >
+        Next
+      </button>
+    </div>
+  </div>
+
+  <!-- Add this inside the applied jobs section -->
+  <div
+    class="pagination-controls"
+    *ngIf="activeStatus === 'applied' && appliedTotalPages > 1"
+  >
+    <div class="pagination-info">
+      {{ appliedPaginationInfo }}
+    </div>
+
+    <div class="pagination-buttons">
+      <button
+        mat-stroked-button
+        (click)="previousAppliedPage()"
+        [disabled]="appliedCurrentPage === 1"
+        class="pagination-button"
+      >
+        Previous
+      </button>
+
+      <div class="page-numbers">
+        <button
+          *ngFor="let page of [].constructor(appliedTotalPages); let i = index"
+          mat-stroked-button
+          (click)="goToAppliedPage(i + 1)"
+          [class.active]="appliedCurrentPage === i + 1"
+          class="page-button"
+        >
+          {{ i + 1 }}
+        </button>
+      </div>
+
+      <button
+        mat-stroked-button
+        (click)="nextAppliedPage()"
+        [disabled]="appliedCurrentPage === appliedTotalPages"
+        class="pagination-button"
+      >
+        Next
+      </button>
+    </div>
+  </div>
+
+  <!-- Add this inside the interviews section -->
+  <div
+    class="pagination-controls"
+    *ngIf="activeStatus === 'interview' && interviewsTotalPages > 1"
+  >
+    <div class="pagination-info">
+      {{ interviewsPaginationInfo }}
+    </div>
+
+    <div class="pagination-buttons">
+      <button
+        mat-stroked-button
+        (click)="previousInterviewsPage()"
+        [disabled]="interviewsCurrentPage === 1"
+        class="pagination-button"
+      >
+        Previous
+      </button>
+
+      <div class="page-numbers">
+        <button
+          *ngFor="
+            let page of [].constructor(interviewsTotalPages);
+            let i = index
+          "
+          mat-stroked-button
+          (click)="goToInterviewsPage(i + 1)"
+          [class.active]="interviewsCurrentPage === i + 1"
+          class="page-button"
+        >
+          {{ i + 1 }}
+        </button>
+      </div>
+
+      <button
+        mat-stroked-button
+        (click)="nextInterviewsPage()"
+        [disabled]="interviewsCurrentPage === interviewsTotalPages"
+        class="pagination-button"
+      >
+        Next
+      </button>
+    </div>
+  </div>
 
   <ng-template #noJobs>
     <div class="no-jobs-message">
