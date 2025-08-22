@@ -1,18 +1,39 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { JobOfferModel } from '../models/job-offer.model';
 
+export interface PaginatedResponse<T> {
+  data: T[];
+  pagination: {
+    current_page: number;
+    per_page: number;
+    total: number;
+    last_page: number;
+    from: number;
+    to: number;
+  };
+}
+
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class JobOfferService {
   private apiUrl = 'http://localhost:8000/api/job-offers/';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-  getJobOffers(): Observable<JobOfferModel[]> {
-    return this.http.get<JobOfferModel[]>(this.apiUrl);
+  getJobOffers(
+    page: number = 1,
+    perPage: number = 5
+  ): Observable<PaginatedResponse<JobOfferModel>> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('per_page', perPage.toString());
+
+    return this.http.get<PaginatedResponse<JobOfferModel>>(this.apiUrl, {
+      params,
+    });
   }
 
   getRecentJobOffers(): Observable<JobOfferModel[]> {
@@ -25,14 +46,18 @@ export class JobOfferService {
 
   createJobOffer(jobOffer: FormData): Observable<JobOfferModel> {
     return this.http.post<JobOfferModel>(this.apiUrl + 'createJob', jobOffer, {
-      headers: this.getAuthHeaders()
+      headers: this.getAuthHeaders(),
     });
   }
 
   updateJobOffer(id: number, jobOffer: FormData): Observable<JobOfferModel> {
-    return this.http.post<JobOfferModel>(`${this.apiUrl}update/${id}`, jobOffer, {
-      headers: this.getAuthHeaders()
-    });
+    return this.http.post<JobOfferModel>(
+      `${this.apiUrl}update/${id}`,
+      jobOffer,
+      {
+        headers: this.getAuthHeaders(),
+      }
+    );
   }
 
   deleteJobOffer(id: number): Observable<void> {
@@ -41,7 +66,7 @@ export class JobOfferService {
 
   getAuthHeaders() {
     return {
-      'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+      Authorization: `Bearer ${localStorage.getItem('auth_token')}`,
     };
   }
 }
