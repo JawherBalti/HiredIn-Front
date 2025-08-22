@@ -9,6 +9,7 @@ export interface Interview {
     company: {
       name: string;
       industry: string;
+      logo_url: string;
     };
     recruiter: {
       name: string;
