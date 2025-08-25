@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { ResumeService } from '../../services/resume';
+import { PaginatedApplicationsResponse, ResumeService } from '../../services/resume';
 import { InterviewService } from '../../services/interview';
 import { CommonModule, Location } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
@@ -10,6 +10,8 @@ import { ScheduleInterviewDialogComponent } from '../schedule-interview-dialog/s
 import { DatePipe } from '@angular/common';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatOption, MatSelect } from '@angular/material/select';
+import { JobOfferService } from '../../services/job-offer';
+import { JobOfferModel } from '../../models/job-offer.model';
 
 @Component({
   selector: 'app-job-applications',
@@ -23,7 +25,7 @@ import { MatOption, MatSelect } from '@angular/material/select';
     MatFormField,
     MatLabel,
     MatSelect,
-    MatOption
+    MatOption,
   ], // Add DragDropModule here],
   templateUrl: './job-applications.html',
   styleUrl: './job-applications.css',
@@ -31,14 +33,23 @@ import { MatOption, MatSelect } from '@angular/material/select';
 // src/app/components/job-applications/job-applications.component.ts
 export class JobApplications implements OnInit {
   jobOfferId: number = 0;
+  jobOffer: JobOfferModel | null = null;
   applications: any[] = [];
   isLoading = true;
   error: string = '';
+
+  // Pagination properties
+  currentPage = 1;
+  itemsPerPage = 9;
+  totalItems = 0;
+  totalPages = 1;
+  paginationInfo: string = '';
 
   showInterviewForm: { [key: number]: boolean } = {};
   interviews: { [key: number]: any } = {};
 
   constructor(
+    private jobOfferService: JobOfferService,
     private route: ActivatedRoute,
     private resumeService: ResumeService,
     private interviewService: InterviewService,
@@ -49,25 +60,97 @@ export class JobApplications implements OnInit {
   ngOnInit(): void {
     this.jobOfferId = +this.route.snapshot.paramMap.get('id')!;
     this.loadApplications();
+    this.loadJobOffer();
   }
 
   goBack(): void {
     this.location.back();
   }
 
-  loadApplications(): void {
-    this.isLoading = true;
-    this.resumeService.getApplicationsForJob(this.jobOfferId).subscribe({
-      next: (applications) => {
-        this.applications = applications;
-        this.isLoading = false;
+  loadJobOffer(): void {
+    if (!this.jobOfferId) {
+      // this.errorMessage = 'No job offer ID provided';
+      // this.loading = false;
+      return;
+    }
+
+    this.jobOfferService.getJobOfferById(this.jobOfferId).subscribe({
+      next: (data) => {
+        this.jobOffer = data;
+        // this.loading = false;
       },
       error: (error) => {
-        this.error = 'Failed to load applications';
-        this.isLoading = false;
-        console.error('Error loading applications:', error);
+        // this.errorMessage = 'Failed to load job offer details';
+        // this.loading = false;
+        console.error('Error fetching job offer', error);
       },
     });
+  }
+
+  loadApplications(): void {
+    this.isLoading = true;
+    this.resumeService
+      .getApplicationsForJob(
+        this.jobOfferId,
+        this.currentPage,
+        this.itemsPerPage
+      )
+      .subscribe({
+        next: (response: PaginatedApplicationsResponse) => {
+          // Handle both old array format and new paginated format
+          if (Array.isArray(response)) {
+            // Old format - no pagination
+            this.applications = response;
+            this.totalItems = response.length;
+            this.totalPages = Math.ceil(response.length / this.itemsPerPage);
+            this.paginationInfo = `Showing all ${response.length} applications`;
+          } else if (response.data && response.pagination) {
+            // New paginated format
+            this.applications = response.data;
+            this.totalItems = response.pagination.total;
+            this.totalPages = response.pagination.last_page;
+            this.updatePaginationInfo(response.pagination);
+          } else {
+            // Fallback
+            this.applications = [];
+            this.totalItems = this.applications.length;
+            this.totalPages = 1;
+            this.paginationInfo = `Showing ${this.applications.length} applications`;
+          }
+          this.isLoading = false;
+        },
+        error: (error) => {
+          this.error = 'Failed to load applications';
+          this.isLoading = false;
+          console.error('Error loading applications:', error);
+        },
+      });
+  }
+
+  updatePaginationInfo(pagination: any): void {
+    this.paginationInfo = `Showing ${pagination.from} to ${pagination.to} of ${pagination.total} applications`;
+  }
+
+  // Pagination methods
+  goToPage(page: number): void {
+    if (page >= 1 && page <= this.totalPages && page !== this.currentPage) {
+      this.currentPage = page;
+      this.loadApplications();
+    }
+  }
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.loadApplications();
+    }
+  }
+
+  previousPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.loadApplications();
+    }
   }
 
   downloadResume(applicationId: number): void {

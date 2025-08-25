@@ -10,87 +10,154 @@
   <div *ngIf="isLoading" class="loading-overlay active">
     <div class="spinner"></div>
   </div>
+
+  <!-- Grid container for the application cards -->
+  <div class="job-info">
+    <h3>{{ jobOffer?.title }}</h3>
+    <p>Job description: {{ jobOffer?.description }}</p>
+    <p>Ends on: {{ jobOffer?.deadline | date : "mediumDate" }}</p>
+  </div>
+
   <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
 
   <div *ngIf="!isLoading && applications.length === 0" class="no-applications">
     No applications received yet.
   </div>
 
-  <div *ngFor="let app of applications" class="application-card">
-    <div class="job-info">
-      <h3>{{ app.job_offer.title }}</h3>
-      <p>Job description: {{ app.job_offer.description }}</p>
-      <p>Ends on: {{ app.job_offer.deadline | date : "mediumDate" }}</p>
-    </div>
+  <div class="application-list">
+    <div *ngFor="let app of applications" class="application-card">
+      <div class="applicant-info">
+        <h3>{{ app.user.name }}</h3>
+        <p>Email: {{ app.user.email }}</p>
+        <p>Applied on: {{ app.created_at | date : "mediumDate" }}</p>
+        <p>
+          Status:
+          <span [class]="'status-' + app.status">{{ app.status }}</span>
+        </p>
+      </div>
 
-    <div class="applicant-info">
-      <h3>{{ app.user.name }}</h3>
-      <p>Email: {{ app.user.email }}</p>
-      <p>Applied on: {{ app.created_at | date : "mediumDate" }}</p>
-      <p>
-        Status:
-        <span [class]="'status-' + app.status">{{ app.status }}</span>
-      </p>
-    </div>
+      <div class="application-actions">
+        <button mat-button color="primary" (click)="downloadResume(app.id)">
+          <mat-icon>download</mat-icon> Download Resume
+        </button>
 
-    <div class="application-actions">
-      <button mat-button color="primary" (click)="downloadResume(app.id)">
-        <mat-icon>download</mat-icon> Download Resume
-      </button>
+        <div class="status-actions">
+          <mat-form-field appearance="outline">
+            <mat-label>Status</mat-label>
+            <mat-select
+              #statusSelect
+              (valueChange)="updateStatus(app.id, statusSelect.value)"
+              [value]="app.status"
+            >
+              <mat-option value="pending">Pending</mat-option>
+              <mat-option value="rejected">Rejected</mat-option>
+              <mat-option value="accepted">Accepted</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
 
-      <div class="status-actions">
-        <mat-form-field appearance="outline">
-          <mat-label>Status</mat-label>
-          <mat-select
-            #statusSelect
-            (valueChange)="updateStatus(app.id, statusSelect.value)"
-            [value]="app.status"
+      <div *ngIf="app.cover_letter" class="cover-letter">
+        <h4>Cover Letter:</h4>
+        <p>{{ app.cover_letter }}</p>
+      </div>
+
+      <!-- Interview Section -->
+      <div class="interview-section">
+        <!-- Show interview button only when status is accepted -->
+        <div *ngIf="app.status === 'accepted'; else notAcceptedMessage">
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="openScheduleDialog(app)"
           >
-            <mat-option value="pending">Pending</mat-option>
-            <mat-option value="rejected">Rejected</mat-option>
-            <mat-option value="accepted">Accepted</mat-option>
-          </mat-select>
-        </mat-form-field>
+            <mat-icon>{{
+              app.interview ? "edit_calendar" : "calendar_today"
+            }}</mat-icon>
+            {{ app.interview ? "Reschedule Interview" : "Schedule Interview" }}
+          </button>
+
+          <!-- Show interview details if interview exists -->
+          <div *ngIf="app.interview" class="interview-details">
+            <h4>Scheduled Interview:</h4>
+            <p>
+              <strong>Time:</strong>
+              {{ app.interview.scheduled_time | date : "medium" }}
+            </p>
+            <p>
+              <strong>Location:</strong>
+              {{ app.interview.location || "Not specified" }}
+            </p>
+            <p *ngIf="app.interview.notes">
+              <strong>Notes:</strong> {{ app.interview.notes }}
+            </p>
+            <p>
+              <strong>Status:</strong>
+              <span [class]="'interview-status-' + app.interview.status">
+                {{ app.interview.status }}
+              </span>
+            </p>
+          </div>
+
+          <!-- Show message when no interview is scheduled but status is accepted -->
+          <div *ngIf="!app.interview" class="no-interview-message">
+            <mat-icon>info</mat-icon>
+            <p>
+              No interview scheduled yet. Click the button above to schedule
+              one.
+            </p>
+          </div>
+        </div>
+
+        <!-- Message when status is not accepted -->
+        <ng-template #notAcceptedMessage>
+          <div class="not-accepted-message">
+            <mat-icon>event_busy</mat-icon>
+            <p>
+              No interview scheduled yet. Change status to "Accepted" to be able
+              to schedule an interview
+            </p>
+          </div>
+        </ng-template>
       </div>
     </div>
-
-    <div *ngIf="app.cover_letter" class="cover-letter">
-      <h4>Cover Letter:</h4>
-      <p>{{ app.cover_letter }}</p>
+  </div>
+  <!-- Pagination Controls -->
+  <div *ngIf="totalPages > 1" class="pagination-controls">
+    <div class="pagination-info">
+      {{ paginationInfo }}
     </div>
 
-    <div *ngIf="app.status === 'accepted'" class="interview-section">
+    <div class="pagination-buttons">
       <button
-        mat-raised-button
-        color="primary"
-        (click)="openScheduleDialog(app)"
+        mat-stroked-button
+        (click)="previousPage()"
+        [disabled]="currentPage === 1"
+        class="pagination-button"
       >
-        <mat-icon>{{
-          app.interview ? "edit_calendar" : "calendar_today"
-        }}</mat-icon>
-        {{ app.interview ? "Reschedule Interview" : "Schedule Interview" }}
+        Previous
       </button>
 
-      <div *ngIf="app.interview" class="interview-details">
-        <h4>Scheduled Interview:</h4>
-        <p>
-          <strong>Time:</strong>
-          {{ app.interview.scheduled_time | date : "medium" }}
-        </p>
-        <p>
-          <strong>Location:</strong>
-          {{ app.interview.location || "Not specified" }}
-        </p>
-        <p *ngIf="app.interview.notes">
-          <strong>Notes:</strong> {{ app.interview.notes }}
-        </p>
-        <p>
-          <strong>Status:</strong>
-          <span [class]="'interview-status-' + app.interview.status">
-            {{ app.interview.status }}
-          </span>
-        </p>
+      <div class="page-numbers">
+        <button
+          *ngFor="let page of [].constructor(totalPages); let i = index"
+          mat-stroked-button
+          (click)="goToPage(i + 1)"
+          [class.active]="currentPage === i + 1"
+          class="page-button"
+        >
+          {{ i + 1 }}
+        </button>
       </div>
+
+      <button
+        mat-stroked-button
+        (click)="nextPage()"
+        [disabled]="currentPage === totalPages"
+        class="pagination-button"
+      >
+        Next
+      </button>
     </div>
   </div>
 </div>

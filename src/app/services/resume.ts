@@ -15,6 +15,7 @@ export interface PaginatedApplicationsResponse {
   };
 }
 
+
 @Injectable({
   providedIn: 'root',
 })
@@ -37,8 +38,15 @@ export class ResumeService {
     return this.http.post(`${this.apiUrl}/${jobOfferId}/apply`, formData);
   }
 
-  getApplicationsForJob(jobOfferId: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/${jobOfferId}/applications`);
+  getApplicationsForJob(jobOfferId: number, page: number = 1, perPage: number = 10): Observable<PaginatedApplicationsResponse> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('per_page', perPage.toString());
+
+    return this.http.get<PaginatedApplicationsResponse>(`${this.apiUrl}/${jobOfferId}/applications`, {
+      headers: this.getAuthHeaders(),
+      params: params
+    });
   }
 
   getUserApplications(
