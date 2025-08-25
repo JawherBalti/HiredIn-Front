@@ -10,6 +10,7 @@ import { JobApplications } from './components/job-applications/job-applications'
 import { ApplyToJob } from './components/apply-to-job/apply-to-job';
 import { Notifications } from './components/notifications/notifications';
 import { AuthGuard } from './guards/auth-guard';
+import { CurrentUserJobOfferList } from './components/current-user-job-offer-list/current-user-job-offer-list';
 
 export const routes: Routes = [
     { path: '', component: LandingPage },
@@ -22,7 +23,8 @@ export const routes: Routes = [
     { path: 'job-offers/:id', component: JobOfferDetails, canActivate: [AuthGuard] },
     { path: 'jobs/:id/apply', component: ApplyToJob, canActivate: [AuthGuard] },
     { path: 'jobs/:id/applications', component: JobApplications, canActivate: [AuthGuard] },
-    { path: 'notifications', component: Notifications, canActivate: [AuthGuard]}
+    { path: 'notifications', component: Notifications, canActivate: [AuthGuard]},
+    { path: 'current-user-job-offers', component: CurrentUserJobOfferList, canActivate: [AuthGuard]}
 //   { path: 'apply', component: ApplyComponent, canActivate: [AuthGuard]  }, // Create this later
 //   { 
 //     path: 'dashboard', 

@@ -1,0 +1,72 @@
+<section class="jobs-section">
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-overlay active">
+    <div class="spinner"></div>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Job Cards Grid -->
+  <div class="jobs-grid">
+    <div
+      *ngFor="let job of jobOffers"
+      class="job-card"
+      cdkDrag
+    >
+      <div class="job-badge">{{ job.type }}</div>
+      <div class="job-content">
+        <div class="company-logo">
+          <img
+            [src]="
+              job?.company?.logo_url ||
+              'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlm0t5PrvJkY1Mnh8pMH1l0eTXgTbvLetn7g&s'
+            "
+            [alt]="job.company?.name + ' logo'"
+          />
+        </div>
+        <div class="job-info">
+          <h3>{{ job.title }}</h3>
+          <p class="company">{{ job.company?.name }}</p>
+          <div class="job-meta">
+            <span class="location">
+              <mat-icon>location_on</mat-icon>
+              {{ job.location }}
+            </span>
+            <span class="salary">
+              <mat-icon>attach_money</mat-icon>
+              {{ job.salary || "Negotiable" }}
+            </span>
+            <span class="deadline" *ngIf="job.deadline">
+              <mat-icon>event</mat-icon>
+              {{ job.deadline | date }}
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="job-footer">
+        <span *ngIf="job.created_at" class="posted-date">
+          Posted {{ job.created_at | dateAgo }}
+        </span>
+        <div class="job-actions">
+          <button
+            mat-stroked-button
+            class="view-button"
+            [routerLink]="['/job-offers', job.id]"
+          >
+            View
+          </button>
+          <button
+            mat-stroked-button
+            class="view-button"
+            [routerLink]="['/jobs', job.id, 'applications']"
+          >
+            Applications
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
