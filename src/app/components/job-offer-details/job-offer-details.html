@@ -16,30 +16,43 @@
         <mat-icon>arrow_back</mat-icon>
       </button>
       <h2>{{ jobOffer.title }}</h2>
-      <div class="status-badge" [class]="jobOffer.status">{{ jobOffer.status | titlecase }}</div>
+      <div class="status-badge" [class]="jobOffer.status">
+        {{ jobOffer.status | titlecase }}
+      </div>
     </div>
 
     <div class="company-info">
       <div class="company-logo">
-        <img [src]="jobOffer.company?.logo_url || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlm0t5PrvJkY1Mnh8pMH1l0eTXgTbvLetn7g&s'" 
-             [alt]="jobOffer.company?.name + ' logo'">
+        <img
+          [src]="
+            jobOffer.company?.logo_url ||
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlm0t5PrvJkY1Mnh8pMH1l0eTXgTbvLetn7g&s'
+          "
+          [alt]="jobOffer.company?.name + ' logo'"
+        />
       </div>
       <div>
         <h3>{{ jobOffer.company?.name }}</h3>
         <p *ngIf="jobOffer.company?.website">
-          <a [href]="jobOffer?.company?.website" target="_blank">{{ jobOffer?.company?.website }}</a>
+          <a [href]="jobOffer?.company?.website" target="_blank">{{
+            jobOffer?.company?.website
+          }}</a>
         </p>
-        <p *ngIf="jobOffer.company?.industry">{{ jobOffer?.company?.industry }}</p>
+        <p *ngIf="jobOffer.company?.industry">
+          {{ jobOffer?.company?.industry }}
+        </p>
       </div>
     </div>
-    <div class="job-badge">{{jobOffer.type}}</div>
+    <div class="job-badge">{{ jobOffer.type }}</div>
 
     <div class="details-grid">
       <div class="detail-item">
         <mat-icon>event</mat-icon>
         <div>
           <span class="detail-label">Publish Date</span>
-          <span class="detail-value">{{ jobOffer.created_at | date:'mediumDate' }}</span>
+          <span class="detail-value">{{
+            jobOffer.created_at | date : "mediumDate"
+          }}</span>
         </div>
       </div>
 
@@ -47,7 +60,9 @@
         <mat-icon>schedule</mat-icon>
         <div>
           <span class="detail-label">Deadline</span>
-          <span class="detail-value">{{ jobOffer.deadline | date:'mediumDate' }}</span>
+          <span class="detail-value">{{
+            jobOffer.deadline | date : "mediumDate"
+          }}</span>
         </div>
       </div>
 
@@ -55,8 +70,9 @@
         <mat-icon>attach_money</mat-icon>
         <div>
           <span class="detail-label">Salary</span>
-          <span class="detail-value">{{ jobOffer.salary || 'Negotiable' }}
-</span>
+          <span class="detail-value"
+            >{{ jobOffer.salary || "Negotiable" }}
+          </span>
         </div>
       </div>
 
@@ -78,13 +94,23 @@
       <h3>Your Notes</h3>
       <p class="notes">{{ jobOffer.notes }}</p>
     </div>
-    
+
     <div class="actions">
-      <button *ngIf="currentUser?.id === jobOffer?.user_id" mat-raised-button color="primary" (click)="editJobOffer()">
+      <button
+        *ngIf="currentUser?.id === jobOffer?.user_id"
+        mat-raised-button
+        color="primary"
+        (click)="editJobOffer()"
+      >
         <mat-icon>edit</mat-icon> Edit
       </button>
-      
-      <button *ngIf="currentUser?.id != jobOffer?.user_id" mat-raised-button color="primary" [routerLink]="['/jobs', jobOffer.id, 'apply']">
+
+      <button
+        *ngIf="currentUser?.id != jobOffer?.user_id"
+        mat-raised-button
+        color="primary"
+        (click)="openApplyModal()"
+      >
         Apply Now
       </button>
     </div>
