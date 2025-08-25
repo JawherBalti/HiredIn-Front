@@ -1,131 +1,36 @@
-/* src/app/components/job-applications/job-applications.component.css */
+/* Grid Layout for Applications */
 .applications-container {
-  max-width: 1000px;
-  margin: 2rem auto;
-  padding: 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 .applications-container h2 {
-  color: #2c3e50;
-  margin-bottom: 1.5rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid #ecf0f1;
-}
-
-.no-applications {
-  text-align: center;
-  padding: 2rem;
-  color: #7f8c8d;
-  background: #f9f9f9;
-  border-radius: 8px;
-}
-
-.application-card {
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
+  color: #1a1a1a;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
   display: flex;
-  flex-direction: column;
-}
-
-.applicant-info {
-  border-top: 1px solid #ecf0f1
-}
-
-.applicant-info h3 {
-  color: #3498db;
-  margin-bottom: 0.5rem;
-}
-
-.applicant-info p {
-  color: #7f8c8d;
-  margin: 0.25rem 0;
-}
-
-.application-actions {
-  display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin: 1rem 0;
-  padding-top: 1rem;
-  border-top: 1px solid #ecf0f1;
+  gap: 0.75rem;
 }
 
-.application-actions button {
-  background-color: #3498db;
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
+/* Grid setup for the application cards */
+.application-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);  /* Creates 3 equal columns */
+  gap: 1.5rem;  /* Adds space between the cards */
 }
 
-.application-actions button:hover {
-  background-color: #2980b9;
-}
-
-.status-actions select {
-  padding: 0.5rem;
-  border-radius: 4px;
-  border: 1px solid #ddd;
-  background: #f9f9f9;
-  cursor: pointer;
-}
-
-.cover-letter {
-  margin-top: 1rem;
-  padding-top: 1rem;
-  border-top: 1px solid #ecf0f1;
-}
-
-.cover-letter h4 {
-  color: #2c3e50;
-  margin-bottom: 0.5rem;
-}
-
-.cover-letter p {
-  color: #34495e;
-  line-height: 1.6;
-  white-space: pre-wrap;
-}
-
-/* Status badges */
-.status-pending {
-  color: #f39c12;
-  font-weight: 600;
-}
-
-.status-reviewed {
-  color: #3498db;
-  font-weight: 600;
-}
-
-.status-rejected {
-  color: #e74c3c;
-  font-weight: 600;
-}
-
-.status-accepted {
-  color: #2ecc71;
-  font-weight: 600;
-}
-
-.is-loading {
-  text-align: center;
-  padding: 2rem;
-  color: #7f8c8d;
-}
-
+/* Loading State - Simplified */
 .loading-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.98);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -135,8 +40,8 @@
 .spinner {
   width: 40px;
   height: 40px;
-  border: 4px solid rgba(63, 81, 181, 0.2);
-  border-top-color: #3f51b5;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #667eea;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -145,142 +50,395 @@
   to { transform: rotate(360deg); }
 }
 
+/* Error State - Simplified */
 .alert-danger {
-  color: #e74c3c;
-  padding: 0.75rem;
-  margin-bottom: 1rem;
-  background-color: #fadbd8;
-  border-radius: 4px;
-  border-left: 4px solid #e74c3c;
-}
-
-/* src/app/components/job-applications/job-applications.css */
-.interview-section {
-  margin-top: 15px;
-  padding-top: 15px;
-  border-top: 1px solid #eee;
-}
-
-.interview-details {
-  margin-top: 10px;
-  padding: 10px;
-  background-color: #f9f9f9;
-  border-radius: 4px;
-}
-
-.full-width {
-  width: 100%;
-  margin-bottom: 15px;
-}
-
-/* src/app/components/job-applications/job-applications.css */
-.interview-section {
-  margin-top: 15px;
-  padding-top: 15px;
-  border-top: 1px solid #eee;
-}
-
-.interview-details {
-  margin-top: 10px;
-  padding: 10px;
-  background-color: #f9f9f9;
-  border-radius: 4px;
-}
-
-.full-width {
-  width: 100%;
-  margin-bottom: 15px;
-}
-
-.applications-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-.application-card {
-  border: 1px solid #e0e0e0;
+  background: #fee2e2;
+  color: #dc2626;
+  padding: 1rem;
   border-radius: 8px;
-  padding: 20px;
-  margin-bottom: 20px;
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+  border-left: 4px solid #dc2626;
 }
 
-.job-info, .applicant-info {
-  margin-bottom: 15px;
+/* Empty State - Simplified */
+.no-applications {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: #f8fafc;
+  border-radius: 12px;
+  color: #64748b;
+  font-size: 1.1rem;
+  border: 2px dashed #e2e8f0;
 }
 
+/* Application Cards - Optimized */
+.application-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e2e8f0;
+  transition: box-shadow 0.2s ease;
+  position: relative;
+}
+
+.application-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.application-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: #667eea;
+  border-radius: 12px 12px 0 0;
+}
+
+/* Job Info */
+.job-info {
+  margin-bottom: 1.5rem;
+}
+
+.job-info h3 {
+  color: #1e293b;
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.job-info p {
+  color: #64748b;
+  line-height: 1.5;
+  margin-bottom: 0.5rem;
+}
+
+.job-info p:last-child {
+  color: #475569;
+  font-weight: 500;
+}
+
+/* Applicant Info */
+.applicant-info {
+  padding: 1.25rem;
+  background: #f8fafc;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  border: 1px solid #e2e8f0;
+}
+
+.applicant-info h3 {
+  color: #1e293b;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.applicant-info p {
+  color: #475569;
+  margin-bottom: 0.5rem;
+}
+
+/* Application Actions */
 .application-actions {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  margin: 15px 0;
+  gap: 1rem;
+  margin: 1.5rem 0;
+  padding: 1.5rem 0;
+  border-top: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
 }
 
+/* Download Button */
+.application-actions button:first-child {
+  background: #10b981;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background-color 0.2s ease;
+}
+
+.application-actions button:first-child:hover {
+  background: #059669;
+}
+
+/* Status Select */
 .status-actions {
-  min-width: 200px;
+  min-width: 180px;
 }
 
+.status-actions .mat-form-field {
+  width: 100%;
+}
+
+/* Status Badges - Simplified */
 .status-pending {
-  color: #ff9800;
+  background: #f59e0b;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 16px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  display: inline-block;
 }
 
 .status-rejected {
-  color: #f44336;
+  background: #ef4444;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 16px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  display: inline-block;
 }
 
 .status-accepted {
-  color: #4caf50;
+  background: #10b981;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 16px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  display: inline-block;
 }
 
+/* Cover Letter */
+.cover-letter {
+  background: #fffbeb;
+  padding: 1.25rem;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+  border: 1px solid #fed7aa;
+}
+
+.cover-letter h4 {
+  color: #92400e;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.cover-letter p {
+  color: #78350f;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  font-size: 0.95rem;
+}
+
+/* Interview Section */
 .interview-section {
-  margin-top: 20px;
-  padding-top: 20px;
-  border-top: 1px solid #eee;
+  background: #eff6ff;
+  padding: 1.25rem;
+  border-radius: 8px;
+  margin-top: 1.5rem;
+  border: 1px solid #bfdbfe;
 }
 
+.interview-section button {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background-color 0.2s ease;
+}
+
+.interview-section button:hover {
+  background: #2563eb;
+}
+
+/* Interview Details */
 .interview-details {
-  margin-top: 15px;
-  padding: 15px;
-  background-color: #f5f5f5;
-  border-radius: 4px;
+  background: white;
+  padding: 1.25rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+  border: 1px solid #e2e8f0;
 }
 
+.interview-details h4 {
+  color: #1e40af;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.interview-details p {
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+.interview-details strong {
+  color: #1e40af;
+}
+
+/* Interview Status Badges - Simplified */
 .interview-status-scheduled {
-  color: #2196f3;
+  background: #3b82f6;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 16px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  display: inline-block;
 }
 
 .interview-status-completed {
-  color: #4caf50;
+  background: #10b981;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 16px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  display: inline-block;
 }
 
 .interview-status-canceled {
-  color: #f44336;
+  background: #ef4444;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 16px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  display: inline-block;
 }
 
-.cover-letter {
-  margin-top: 15px;
-  padding: 15px;
-  background-color: #f9f9f9;
-  border-left: 4px solid #2196f3;
+/* Responsive Design */
+@media (max-width: 768px) {
+  .applications-container {
+    padding: 1rem;
+  }
+  
+  .applications-container h2 {
+    font-size: 1.5rem;
+  }
+  
+  .application-list {
+    grid-template-columns: repeat(2, 1fr);  /* 2 columns for smaller screens */
+  }
 }
 
-.back-button {
-  margin-right: 10px;
+@media (max-width: 480px) {
+  .application-list {
+    grid-template-columns: 1fr;  /* Single column for very small screens */
+  }
+  
+  .application-card {
+    padding: 1rem;
+  }
+  
+  .applicant-info,
+  .cover-letter,
+  .interview-section {
+    padding: 1rem;
+  }
+  
+  .application-actions button:first-child,
+  .interview-section button {
+    width: 100%;
+    justify-content: center;
+  }
 }
 
-.alert {
-  padding: 15px;
-  margin-bottom: 20px;
-  border: 1px solid #f44336;
-  border-radius: 4px;
-  color: #f44336;
-  background-color: #ffebee;
+/* Interview section messages */
+.not-accepted-message,
+.no-interview-message {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+  font-size: 0.95rem;
 }
 
-.no-applications {
-  text-align: center;
-  padding: 20px;
-  color: #757575;
+.not-accepted-message {
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+  color: #92400e;
+  border: 1px solid #fcd34d;
+}
+
+.not-accepted-message mat-icon {
+  color: #f59e0b;
+  width: 50%
+}
+
+.no-interview-message {
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  color: #1e40af;
+  border: 1px solid #93c5fd;
+}
+
+.no-interview-message mat-icon {
+  color: #3b82f6;
+}
+
+.not-accepted-message p,
+.no-interview-message p {
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Ensure proper spacing */
+.interview-section > div:first-child {
+  margin-bottom: 1rem;
+}
+
+/* Pagination Controls */
+.pagination-controls {
+  margin: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.pagination-info {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.pagination-buttons {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.page-numbers {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.pagination-button,
+.page-button {
+  min-width: auto;
+  padding: 0.5rem 1rem;
+  color: #3f51b5
+}
+
+.page-button.active {
+  background-color: #3f51b5;
+  color: white;
+}
+
+.pagination-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: #cbd5e0;
+  color: #3f51b5
 }
