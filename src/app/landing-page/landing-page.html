@@ -51,16 +51,20 @@
 
       <div class="carousel-wrapper">
         <div
+          *ngIf="!isLoading; else loading"
           class="carousel"
           [style.transform]="
-            'translateX(' + -currentSlide * (100 / visibleSlides) + '%)'
+            'translateX(' + -currentSlide * (50 / visibleSlides) + '%)'
           "
         >
           <div *ngFor="let job of jobOffers; let i = index" class="job-card">
             <div class="job-badge">{{ job?.type }}</div>
             <div class="job-content">
               <div class="company-logo">
-                <img [src]="job?.company?.logo_url" [alt]="job.company + ' logo'" />
+                <img
+                  [src]="job?.company?.logo_url"
+                  [alt]="job.company + ' logo'"
+                />
               </div>
               <div class="job-info">
                 <h3>{{ job?.title }}</h3>
@@ -78,24 +82,31 @@
               </div>
             </div>
             <div class="job-footer">
-              <span class="posted-date">Posted {{ job?.created_at! | dateAgo }}</span>
+              <span class="posted-date"
+                >Posted {{ job?.created_at! | dateAgo }}</span
+              >
               <button
                 mat-stroked-button
                 class="apply-button"
-                (click)="handleQuickApply()"
+                [routerLink]="['/job-offers', job.id]"
               >
                 Quick Apply
               </button>
             </div>
           </div>
         </div>
+        <ng-template #loading>
+          <div *ngIf="isLoading" class="spinner-container">
+            <div class="spinner"></div>
+          </div>
+        </ng-template>
       </div>
 
       <button
         mat-icon-button
         class="nav-button next"
         (click)="nextSlide()"
-        [disabled]="currentSlide >= featuredJobs.length - visibleSlides"
+        [disabled]="currentSlide >= jobOffers.length - visibleSlides"
       >
         <mat-icon>chevron_right</mat-icon>
       </button>
@@ -111,7 +122,7 @@
       <div class="carousel-indicators">
         <button
           *ngFor="
-            let _ of [].constructor(featuredJobs.length - visibleSlides + 1);
+            let _ of createRange=(jobOffers.length - visibleSlides + 1);
             let i = index
           "
           [class.active]="i === currentSlide"
