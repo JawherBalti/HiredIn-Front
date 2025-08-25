@@ -36,6 +36,10 @@ export class JobOfferService {
     });
   }
 
+  getCurrentUserJobs(): Observable<JobOfferModel[]> {
+    return this.http.get<JobOfferModel[]>(`${this.apiUrl}current-user-job-offers`);
+  }
+  
   getRecentJobOffers(): Observable<JobOfferModel[]> {
     return this.http.get<JobOfferModel[]>(`${this.apiUrl}recent-job-offers`);
   }
