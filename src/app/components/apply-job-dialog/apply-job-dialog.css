@@ -1,0 +1,119 @@
+/* Style the dialog container for consistent spacing */
+mat-dialog-content {
+  padding: 20px;
+}
+
+/* Apply styling to form fields */
+.form-group {
+  margin-bottom: 20px;
+}
+
+/* File input */
+input[type="file"] {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-top: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+}
+
+/* Hover and focus effects for the file input */
+input[type="file"]:hover {
+  border-color: #3f51b5;
+}
+
+input[type="file"]:focus {
+  border-color: #3f51b5;
+  outline: none;
+}
+
+/* Style the textarea for better appearance */
+textarea {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-top: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+  font-size: 14px;
+  resize: vertical;
+  transition: border-color 0.3s ease;
+}
+
+/* Hover and focus effects for the textarea */
+textarea:hover {
+  border-color: #3f51b5;
+}
+
+textarea:focus {
+  border-color: #3f51b5;
+  outline: none;
+}
+
+/* Invalid input feedback */
+.is-invalid {
+  border-color: #e74c3c;
+}
+
+.invalid-feedback {
+  color: #e74c3c;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+/* MatDialog actions buttons styling */
+mat-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px;
+}
+
+mat-button, mat-raised-button {
+  margin-left: 10px;
+}
+
+/* Custom button styles */
+button[mat-raised-button] {
+  font-size: 14px;
+  min-width: 120px;
+}
+
+/* Add spacing for header */
+h2.mat-dialog-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+/* Ensure the modal is responsive */
+@media (max-width: 600px) {
+  mat-dialog-content {
+    padding: 10px;
+  }
+
+  .form-group {
+    margin-bottom: 15px;
+  }
+}
+
+.alert-success {
+  background-color: #d4edda;
+  color: #155724;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 15px;
+}
+
+.alert-danger {
+  background: #fee2e2;
+  color: #dc2626;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  border-left: 4px solid #dc2626;
+}
