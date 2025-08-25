@@ -217,3 +217,76 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* src/app/components/apply-job-dialog/apply-job-dialog.component.css */
+.full-width {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.alert-danger {
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+  padding: 8px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+}
+
+/* src/app/components/apply-job-dialog/apply-job-dialog.component.css */
+.full-width {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.form-group input[type="file"] {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fafafa;
+}
+
+.form-group input[type="file"].is-invalid {
+  border-color: #f44336;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.alert-danger {
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+  padding: 8px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+}
+
+mat-form-field {
+  width: 100%;
+}
