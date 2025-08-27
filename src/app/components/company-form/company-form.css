@@ -10,6 +10,18 @@
   position: relative;
 }
 
+.company-form-header {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* centers the title */
+  position: relative; /* allows absolute positioning of the button */
+}
+
+.back-button {
+  position: absolute;
+  left: 0;
+}
+
 /* Loading Overlay */
 .loading-overlay {
   position: absolute;

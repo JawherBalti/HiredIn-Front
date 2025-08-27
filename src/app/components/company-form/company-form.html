@@ -1,5 +1,10 @@
 <div class="company-form-container">
-  <h2>{{ isEditMode ? "Edit" : "Create" }} Company</h2>
+    <h2 class="company-form-header">
+    <button mat-icon-button class="back-button" (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    {{ isEditMode ? "Edit" : "Create" }} Company
+  </h2>
   <form [formGroup]="companyForm" (ngSubmit)="onSubmit()">
     <div class="form-grid">
       <div class="form-group">
