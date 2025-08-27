@@ -1,4 +1,10 @@
 <section class="jobs-section">
+  <h2>
+    <button mat-icon-button class="back-button" (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    My Job Offers
+  </h2>
   <!-- Loading State -->
   <div *ngIf="loading" class="loading-overlay active">
     <div class="spinner"></div>
@@ -11,12 +17,13 @@
 
   <!-- Job Cards Grid -->
   <div class="jobs-grid">
-    <div
-      *ngFor="let job of jobOffers"
-      class="job-card"
-      cdkDrag
-    >
-      <div class="job-badge">{{ job.type }}</div>
+    <div *ngFor="let job of jobOffers" class="job-card" cdkDrag>
+      <div class="job-header">
+        <div class="job-badge">{{ job.type }}</div>
+        <a [routerLink]="['/job-offers', job.id, 'edit']">
+          <mat-icon>edit</mat-icon>
+        </a>
+      </div>
       <div class="job-content">
         <div class="company-logo">
           <img
@@ -67,6 +74,44 @@
           </button>
         </div>
       </div>
+    </div>
+  </div>
+  <!-- Pagination Controls -->
+  <div *ngIf="totalPages > 1" class="pagination-controls">
+    <div class="pagination-info">
+      {{ paginationInfo }}
+    </div>
+
+    <div class="pagination-buttons">
+      <button
+        mat-stroked-button
+        (click)="previousPage()"
+        [disabled]="currentPage === 1"
+        class="pagination-button"
+      >
+        Previous
+      </button>
+
+      <div class="page-numbers">
+        <button
+          *ngFor="let page of [].constructor(totalPages); let i = index"
+          mat-stroked-button
+          (click)="goToPage(i + 1)"
+          [class.active]="currentPage === i + 1"
+          class="page-button"
+        >
+          {{ i + 1 }}
+        </button>
+      </div>
+
+      <button
+        mat-stroked-button
+        (click)="nextPage()"
+        [disabled]="currentPage === totalPages"
+        class="pagination-button"
+      >
+        Next
+      </button>
     </div>
   </div>
 </section>

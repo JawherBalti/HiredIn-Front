@@ -36,8 +36,12 @@ export class JobOfferService {
     });
   }
 
-  getCurrentUserJobs(): Observable<JobOfferModel[]> {
-    return this.http.get<JobOfferModel[]>(`${this.apiUrl}current-user-job-offers`);
+  getCurrentUserJobs(page: number = 1, perPage: number = 10): Observable<PaginatedResponse<JobOfferModel>> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('per_page', perPage.toString());
+
+    return this.http.get<PaginatedResponse<JobOfferModel>>(`${this.apiUrl}current-user-job-offers`, { params });
   }
   
   getRecentJobOffers(): Observable<JobOfferModel[]> {
