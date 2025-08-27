@@ -3,7 +3,7 @@
   max-width: 500px;
   margin: 2rem auto;
   padding: 2rem;
-  background-color: #f8f9fa;
+  background: white;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
@@ -11,8 +11,35 @@
 /* Form header */
 .job-offer-form-container h2 {
   color: #2c3e50;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
   text-align: center;
+  font-size: 1.8rem;
+  font-weight: 600;
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+.job-offer-form-container h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(to right, #4a90e2, #8e54e9);
+}
+
+.job-offer-header {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* centers the title */
+  position: relative; /* allows absolute positioning of the button */
+}
+
+.back-button {
+  position: absolute;
+  left: 0;
 }
 
 /* Form styling */
@@ -38,6 +65,7 @@
   width: 100%;
   padding: 0.75rem;
   border: 1px solid #ced4da;
+  background-color: #f8fafc;
   border-radius: 4px;
   font-size: 1rem;
   transition: border-color 0.15s ease-in-out;
@@ -214,4 +242,31 @@
   width: 16px;
   height: 16px;
   color: #4a90e2;
+}
+
+/* Loading State - Simplified */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.98);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #667eea;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }

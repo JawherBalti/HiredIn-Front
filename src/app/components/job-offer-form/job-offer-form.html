@@ -1,6 +1,18 @@
 <div class="job-offer-form-container">
-  <h2>{{ isEditMode ? "Edit" : "Create" }} Job Offer</h2>
-  <form [formGroup]="jobOfferForm" (ngSubmit)="onSubmit()">
+  <h2 class="job-offer-header">
+    <button mat-icon-button class="back-button" (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    {{ isEditMode ? "Edit" : "Create" }} Job Offer
+  </h2>
+  <div *ngIf="jobDataLoading" class="loading-overlay active">
+    <div class="spinner"></div>
+  </div>
+  <form
+    *ngIf="!jobDataLoading"
+    [formGroup]="jobOfferForm"
+    (ngSubmit)="onSubmit()"
+  >
     <div class="mb-3">
       <label for="company_id" class="form-label">Company</label>
       <select class="form-control" id="company_id" formControlName="company_id">
@@ -78,11 +90,7 @@
 
     <!-- Form Actions -->
     <div class="form-actions">
-      <button
-        type="submit"
-        class="btn btn-primary"
-        [disabled]="loading || !jobOfferForm.valid"
-      >
+      <button type="submit" class="btn btn-primary" [disabled]="loading">
         <!-- Show spinner when loading, otherwise show text -->
         <mat-spinner
           *ngIf="loading"
@@ -98,7 +106,9 @@
         (click)="goBack()"
         class="btn btn-secondary"
         [disabled]="loading"
-      >Cancel</button>
+      >
+        Cancel
+      </button>
     </div>
   </form>
 </div>

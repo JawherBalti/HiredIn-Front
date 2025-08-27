@@ -14,12 +14,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'; // Add this import
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-job-offer-form',
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    MatIconModule,
     MatButtonModule,
     MatInputModule,
     MatFormFieldModule,
@@ -34,7 +36,8 @@ export class JobOfferForm implements OnInit {
   isEditMode = false;
   currentId: number | null = null;
   resumeFile: File | null = null;
-  loading = true;
+  loading = false;
+  jobDataLoading = false;
 
   constructor(
     private fb: FormBuilder,
@@ -80,6 +83,7 @@ export class JobOfferForm implements OnInit {
   }
 
   loadJobOffer(id: number): void {
+    this.jobDataLoading = true;
     this.jobOfferService.getJobOfferById(id).subscribe(
       (data) => {
         this.jobOfferForm.patchValue({
@@ -94,8 +98,12 @@ export class JobOfferForm implements OnInit {
           location: data.location,
           notes: data.notes,
         });
+        this.jobDataLoading = false;
       },
-      (error) => console.error('Error fetching job offer', error)
+      (error) => {
+        console.error('Error fetching job offer', error)
+        this.jobDataLoading = false;
+      }
     );
   }
 
