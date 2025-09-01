@@ -1,0 +1,109 @@
+<section class="jobs-section">
+  <h2>
+    <button mat-icon-button class="back-button" (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    My Companies
+  </h2>
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-overlay active">
+    <div class="spinner"></div>
+  </div>
+
+  <!-- Error State -->
+  <!-- <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div> -->
+
+  <!-- Job Cards Grid -->
+  <div class="jobs-grid">
+    <div *ngFor="let company of companies" class="job-card">
+      <div class="job-header">
+        <div class=""></div>
+        <a [routerLink]="['/company', company.id, 'edit']">
+          <mat-icon>edit</mat-icon>
+        </a>
+      </div>
+      <div class="job-content">
+        <div class="company-logo">
+          <img
+            [src]="
+              company?.logo_url ||
+              'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlm0t5PrvJkY1Mnh8pMH1l0eTXgTbvLetn7g&s'
+            "
+            [alt]="company?.name + ' logo'"
+          />
+        </div>
+        <div class="job-info">
+          <h3>{{ company?.name }}</h3>
+          <p class="company">{{ company?.website }}</p>
+          <div class="job-meta">
+            <span class="salary">
+              <mat-icon>memory</mat-icon>
+              {{ company?.industry }}
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="job-footer">
+        <span *ngIf="company.created_at" class="posted-date">
+          Created {{ company.created_at | dateAgo }}
+        </span>
+        <!-- <div class="job-actions">
+          <button
+            mat-stroked-button
+            class="view-button"
+            [routerLink]="['/job-offers', job.id]"
+          >
+            View
+          </button>
+          <button
+            mat-stroked-button
+            class="view-button"
+            [routerLink]="['/jobs', job.id, 'applications']"
+          >
+            Applications
+          </button>
+        </div> -->
+      </div>
+    </div>
+  </div>
+  <!-- Pagination Controls -->
+  <!-- <div *ngIf="totalPages > 1" class="pagination-controls">
+    <div class="pagination-info">
+      {{ paginationInfo }}
+    </div>
+
+    <div class="pagination-buttons">
+      <button
+        mat-stroked-button
+        (click)="previousPage()"
+        [disabled]="currentPage === 1"
+        class="pagination-button"
+      >
+        Previous
+      </button>
+
+      <div class="page-numbers">
+        <button
+          *ngFor="let page of [].constructor(totalPages); let i = index"
+          mat-stroked-button
+          (click)="goToPage(i + 1)"
+          [class.active]="currentPage === i + 1"
+          class="page-button"
+        >
+          {{ i + 1 }}
+        </button>
+      </div>
+
+      <button
+        mat-stroked-button
+        (click)="nextPage()"
+        [disabled]="currentPage === totalPages"
+        class="pagination-button"
+      >
+        Next
+      </button>
+    </div>
+  </div> -->
+</section>
