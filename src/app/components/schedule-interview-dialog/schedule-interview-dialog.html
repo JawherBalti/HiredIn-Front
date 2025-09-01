@@ -1,31 +1,65 @@
-<!-- src/app/components/schedule-interview-dialog/schedule-interview-dialog.component.html -->
-<h2 mat-dialog-title>
-  {{ isEditMode ? 'Reschedule Interview' : 'Schedule Interview' }}
-</h2>
-
-<mat-dialog-content>
-  <form [formGroup]="interviewForm">
-    <mat-form-field appearance="fill" class="full-width">
-      <mat-label>Date & Time</mat-label>
-      <input matInput type="datetime-local" formControlName="scheduled_time" required>
-    </mat-form-field>
-
-    <mat-form-field appearance="fill" class="full-width">
-      <mat-label>Location</mat-label>
-      <input matInput formControlName="location" required>
-    </mat-form-field>
-
-    <mat-form-field appearance="fill" class="full-width">
-      <mat-label>Notes</mat-label>
-      <textarea matInput formControlName="notes"></textarea>
-    </mat-form-field>
-  </form>
-</mat-dialog-content>
-
-<mat-dialog-actions align="end">
-  <button mat-button (click)="onCancel()">Cancel</button>
-  <button mat-raised-button color="primary" (click)="onSubmit()" 
-          [disabled]="!interviewForm.valid">
-    {{ isEditMode ? 'Update' : 'Schedule' }}
-  </button>
-</mat-dialog-actions>
+<div class="modal-container">
+  <div class="modal-header">
+    <h2 class="modal-title">
+      <mat-icon>calendar_today</mat-icon>
+      {{ isEditMode ? 'Reschedule Interview' : 'Schedule Interview' }}
+    </h2>
+  </div>
+  
+  <div class="modal-content">
+    <form [formGroup]="interviewForm">
+      <div class="form-row">
+        <div class="form-field">
+          <label class="label required">Date & Time</label>
+          <input 
+            type="datetime-local" 
+            class="form-control" 
+            formControlName="scheduled_time" 
+            required
+          >
+          <div class="datetime-hint">
+            <mat-icon>access_time</mat-icon>
+            Select a date and time for the interview
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-field">
+          <label class="label required">Location</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            formControlName="location" 
+            placeholder="e.g., Conference Room A, Zoom Meeting" 
+            required
+          >
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-field form-notes">
+          <label class="label">Notes</label>
+          <textarea 
+            class="form-control" 
+            formControlName="notes" 
+            placeholder="Add any additional information for the candidate..."
+          ></textarea>
+        </div>
+      </div>
+    </form>
+  </div>
+  
+  <div class="modal-footer">
+    <button mat-button class="btn-cancel" (click)="onCancel()">Cancel</button>
+    <button 
+      mat-raised-button 
+      color="primary" 
+      class="btn-primary" 
+      (click)="onSubmit()" 
+      [disabled]="!interviewForm.valid"
+    >
+      {{ isEditMode ? 'Update' : 'Schedule' }}
+    </button>
+  </div>
+</div>

@@ -1,0 +1,186 @@
+.modal-container {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  overflow: hidden;
+}
+
+.modal-header {
+  background: linear-gradient(135deg, #3f51b5 0%, #3f51b5 100%);
+  color: white;
+  padding: 20px 24px;
+  position: relative;
+}
+
+.modal-title {
+  font-size: 1.5rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+}
+
+.modal-title mat-icon {
+  font-size: 1.8rem;
+  width: 1.8rem;
+  height: 1.8rem;
+}
+
+.modal-content {
+  padding: 24px;
+}
+
+.modal-content form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 20px;
+  width: 100%;
+  justify-content: center;
+}
+
+.form-field {
+  width: 90%;
+  max-width: 400px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.form-notes {
+  margin-top: 10px;
+}
+
+.datetime-hint {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+  color: #666;
+  font-size: 0.875rem;
+}
+
+.datetime-hint mat-icon {
+  margin-right: 8px;
+  color: #2196F3;
+  width: 1.1rem;
+  height: 1.1rem;
+  font-size: 1.1rem;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px 24px;
+  background-color: #f9f9f9;
+  border-top: 1px solid #e0e0e0;
+}
+
+.btn-cancel {
+  background-color: #f5f5f5;
+  color: #757575;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-cancel:hover {
+  background-color: #e0e0e0;
+}
+
+.btn-primary {
+  box-shadow: 0 2px 4px rgba(33, 150, 243, 0.3);
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+  box-shadow: 0 4px 8px rgba(33, 150, 243, 0.3);
+}
+
+.btn-primary:disabled {
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.form-control {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border 0.2s ease;
+  font-family: inherit;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #2196F3;
+  box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
+}
+
+textarea.form-control {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #424242;
+}
+
+.required::after {
+  content: '*';
+  color: #F44336;
+  margin-left: 4px;
+}
+
+/* Validation styles */
+.form-control.ng-invalid.ng-touched {
+  border-color: #F44336;
+}
+
+.form-control.ng-valid.ng-touched {
+  border-color: #4CAF50;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+  .modal-container {
+    border-radius: 0;
+    max-width: 100%;
+  }
+  
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+  
+  .form-field {
+    margin-bottom: 20px;
+    min-width: 100%;
+    width: 100%;
+  }
+  
+  .modal-footer {
+    flex-direction: column;
+  }
+  
+  .modal-footer button {
+    width: 100%;
+  }
+}

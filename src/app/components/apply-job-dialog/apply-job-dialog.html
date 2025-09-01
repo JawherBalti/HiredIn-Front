@@ -1,59 +1,74 @@
-<h2 mat-dialog-title>Apply to Job</h2>
-
-<mat-dialog-content>
-  <!-- Error message -->
-  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
-
-  <!-- Success message -->
-  <div *ngIf="successMessage" class="alert alert-success">
-    {{ successMessage }}
+<div class="modal-container">
+  <div class="modal-header">
+    <h2 class="modal-title">
+      <mat-icon>work_outline</mat-icon>
+      Apply to Job
+    </h2>
   </div>
 
-  <form [formGroup]="applyForm" (ngSubmit)="onSubmit()">
-    <div class="form-group">
-      <label for="resume">Resume (PDF or DOC)</label>
-      <input 
-        type="file" 
-        id="resume" 
-        formControlName="resume"
-        (change)="onFileSelected($event)" 
-        accept=".pdf,.doc,.docx" 
-        [class.is-invalid]="f['resume'].touched && f['resume'].invalid"
-      >
-      <div *ngIf="f['resume'].touched && f['resume'].invalid" class="invalid-feedback">
-        Resume is required
-      </div>
+  <div class="modal-content">
+    <!-- Error message -->
+    <div *ngIf="error" class="alert alert-danger">
+      <mat-icon>error_outline</mat-icon>
+      {{ error }}
     </div>
-    
-    <div class="form-group">
-      <label for="coverLetter">Cover Letter (Optional)</label>
-      <textarea 
-        id="coverLetter" 
-        formControlName="coverLetter"
-        rows="5"
-        placeholder="Write your cover letter here..."
-      ></textarea>
-    </div>
-    
-    <button 
-      type="submit" 
-      [disabled]="isApplying || applyForm.invalid"
-      mat-raised-button 
-      color="primary"
-    >
-      <span *ngIf="!isApplying">Submit Application</span>
-      <span *ngIf="isApplying">
-        <mat-icon class="spinner">hourglass_empty</mat-icon>
-        Applying...
-      </span>
-    </button>
-  </form>
-</mat-dialog-content>
 
-<mat-dialog-actions align="end">
-  <button mat-button (click)="onCancel()">Cancel</button>
-  <button mat-raised-button color="primary" (click)="onSubmit()" 
-          [disabled]="!applyForm.valid || isApplying">
-    Submit Application
-  </button>
-</mat-dialog-actions>
+    <!-- Success message -->
+    <div *ngIf="successMessage" class="alert alert-success">
+      <mat-icon>check_circle_outline</mat-icon>
+      {{ successMessage }}
+    </div>
+
+    <form [formGroup]="applyForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="resume" class="label required">Resume (PDF or DOC)</label>
+        <input
+          type="file"
+          id="resume"
+          class="form-control"
+          formControlName="resume"
+          (change)="onFileSelected($event)"
+          accept=".pdf,.doc,.docx"
+          [class.is-invalid]="f['resume'].touched && f['resume'].invalid"
+        />
+        <div class="file-hint">
+          <mat-icon>description</mat-icon>
+          Upload your resume in PDF or DOC format
+        </div>
+        <div
+          *ngIf="f['resume'].touched && f['resume'].invalid"
+          class="invalid-feedback"
+        >
+          Resume is required
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="coverLetter" class="label">Cover Letter (Optional)</label>
+        <textarea
+          id="coverLetter"
+          class="form-control"
+          formControlName="coverLetter"
+          rows="5"
+          placeholder="Write your cover letter here..."
+        ></textarea>
+        <div class="file-hint">
+          <mat-icon>note</mat-icon>
+          Add a cover letter to increase your chances
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="modal-footer">
+    <button mat-button class="btn-cancel" (click)="onCancel()">Cancel</button>
+    <button
+      mat-raised-button
+      class="btn-primary"
+      (click)="onSubmit()"
+      [disabled]="!applyForm.valid || isApplying"
+    >
+      Submit Application
+    </button>
+  </div>
+</div>
