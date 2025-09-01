@@ -2,7 +2,7 @@
   <div class="navbar-container">
     <!-- Logo -->
     <a routerLink="/" class="logo">
-      <img src="assets/images/hiredin_logo.PNG" alt="HiredIn Logo">
+      <img src="assets/images/hiredin_logo.PNG" alt="HiredIn Logo" />
     </a>
 
     <!-- Desktop Menu -->
@@ -15,24 +15,59 @@
       <ng-template #authenticatedMenu>
         <div routerLink="/notifications" class="unread-count-container">
           <mat-icon class="notification-icon">notifications_active</mat-icon>
-          <span class="unread-count">{{unreadCount}}</span>
+          <span class="unread-count">{{ unreadCount }}</span>
         </div>
         <div class="user-menu">
           <div class="avatar" (click)="toggleMenu()">
-            <img src="https://cdn-icons-png.flaticon.com/512/1253/1253756.png" alt="User Avatar">
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/1253/1253756.png"
+              alt="User Avatar"
+            />
           </div>
           <div class="dropdown-menu" [class.show]="showMenu">
-            <a (click)="closeMenu()" routerLink="/current-user-job-offers" class="dropdown-item">
-              <mat-icon>work</mat-icon>My Job Offers
+            <a
+              (click)="closeMenu()"
+              routerLink="/job-offers"
+              class="dropdown-item"
+            >
+              <mat-icon> list_alt</mat-icon> Browse Job Offers
             </a>
-            
-            <a (click)="closeMenu()" routerLink="/job-offers/create" class="dropdown-item">
+            <a
+              (click)="closeMenu()"
+              routerLink="/current-user-job-offers"
+              class="dropdown-item"
+            >
+              <mat-icon>work_outline</mat-icon>
+              My Job Offers
+            </a>
+
+            <a
+              (click)="closeMenu()"
+              routerLink="/job-offers/create"
+              class="dropdown-item"
+            >
               <mat-icon>post_add</mat-icon> Create Job Offer
             </a>
-            <a (click)="closeMenu()" routerLink="/company/create" class="dropdown-item">
-              <mat-icon>business</mat-icon> Add Company
+            <a
+              (click)="closeMenu()"
+              routerLink="/companies"
+              class="dropdown-item"
+            >
+              <mat-icon>business</mat-icon> My Companies
             </a>
-            <a (click)="closeMenu()" routerLink="/settings" class="dropdown-item">
+            <a
+              (click)="closeMenu()"
+              routerLink="/company/create"
+              class="dropdown-item"
+            >
+              <mat-icon>location_city</mat-icon>
+              Create Company
+            </a>
+            <a
+              (click)="closeMenu()"
+              routerLink="/settings"
+              class="dropdown-item"
+            >
               <mat-icon>settings</mat-icon> Settings
             </a>
             <div *ngIf="authService.isAdmin()" class="admin-section">
@@ -50,30 +85,69 @@
     </div>
 
     <!-- Mobile Menu Toggle -->
-    <button mat-icon-button class="mobile-menu-button" (click)="toggleMobileMenu()">
+    <button
+      mat-icon-button
+      class="mobile-menu-button"
+      (click)="toggleMobileMenu()"
+    >
       <mat-icon>menu</mat-icon>
     </button>
   </div>
 
   <!-- Mobile Menu -->
   <div class="mobile-menu" [class.show]="showMobileMenu">
-    <a routerLink="/login" class="mobile-nav-link" *ngIf="!authService.isLoggedIn()">Login</a>
-    <a routerLink="/register" class="mobile-nav-link" *ngIf="!authService.isLoggedIn()">Register</a>
+    <a
+      routerLink="/login"
+      class="mobile-nav-link"
+      *ngIf="!authService.isLoggedIn()"
+      >Login</a
+    >
+    <a
+      routerLink="/register"
+      class="mobile-nav-link"
+      *ngIf="!authService.isLoggedIn()"
+      >Register</a
+    >
 
     <ng-container *ngIf="authService.isLoggedIn()">
-      <a routerLink="/settings" class="mobile-nav-link">
+      <a (click)="closeMenu()" routerLink="/job-offers" class="dropdown-item">
+        <mat-icon> list_alt</mat-icon> Browse Job Offers
+      </a>
+      <a
+        (click)="closeMenu()"
+        routerLink="/current-user-job-offers"
+        class="dropdown-item"
+      >
+        <mat-icon>work_outline</mat-icon>
+        My Job Offers
+      </a>
+
+      <a
+        (click)="closeMenu()"
+        routerLink="/job-offers/create"
+        class="dropdown-item"
+      >
+        <mat-icon>post_add</mat-icon> Create Job Offer
+      </a>
+      <a (click)="closeMenu()" routerLink="/companies" class="dropdown-item">
+        <mat-icon>business</mat-icon> My Companies
+      </a>
+      <a
+        (click)="closeMenu()"
+        routerLink="/company/create"
+        class="dropdown-item"
+      >
+        <mat-icon>location_city</mat-icon>
+        Create Company
+      </a>
+      <a (click)="closeMenu()" routerLink="/settings" class="dropdown-item">
         <mat-icon>settings</mat-icon> Settings
       </a>
-      <a routerLink="/my-jobs" class="mobile-nav-link">
-        <mat-icon>work</mat-icon> My Jobs
-      </a>
-      <a routerLink="/create-job" class="mobile-nav-link">
-        <mat-icon>post_add</mat-icon> Create Job
-      </a>
-      <a routerLink="/add-company" class="mobile-nav-link">
-        <mat-icon>business</mat-icon> Add Company
-      </a>
-      <a routerLink="/admin" class="mobile-nav-link" *ngIf="authService.isAdmin()">
+      <a
+        routerLink="/admin"
+        class="mobile-nav-link"
+        *ngIf="authService.isAdmin()"
+      >
         <mat-icon>admin_panel_settings</mat-icon> Admin
       </a>
       <a (click)="logout()" class="mobile-nav-link">
