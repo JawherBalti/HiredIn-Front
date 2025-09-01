@@ -1,22 +1,62 @@
 <div class="company-form-container">
-    <h2 class="company-form-header">
+  <h2 class="company-form-header">
     <button mat-icon-button class="back-button" (click)="goBack()">
       <mat-icon>arrow_back</mat-icon>
     </button>
-    {{ isEditMode ? "Edit" : "Create" }} Company
+    {{
+      isEditMode ? "Edit Company" : "Create Company (" + companiesCount + "/ 3)"
+    }}
   </h2>
+
+  <!-- Loading State -->
+  <div *ngIf="companyDataLoading" class="loading-overlay active">
+    <div class="count-spinner"></div>
+  </div>
+
   <form [formGroup]="companyForm" (ngSubmit)="onSubmit()">
     <div class="form-grid">
       <div class="form-group">
         <label for="logo" class="form-label">Company Logo</label>
+
+        <!-- Image Preview -->
+        <div *ngIf="imagePreview" class="image-preview-container">
+          <img
+            [src]="imagePreview"
+            alt="Company logo preview"
+            class="image-preview"
+          />
+          <button
+            type="button"
+            class="remove-image-btn"
+            (click)="removeImage()"
+            *ngIf="!isEditMode"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+
         <input
+          #fileInput
           name="cover"
           (change)="select($event)"
           type="file"
           class="form-control m-1"
           placeholder="image"
+          accept="image/*"
+          [style.display]="imagePreview ? 'none' : 'block'"
         />
+
+        <!-- Upload button when image is already shown -->
+        <button
+          type="button"
+          class="btn btn-outline-secondary mt-2"
+          (click)="fileInput.click()"
+          *ngIf="imagePreview"
+        >
+          Change Image
+        </button>
       </div>
+
       <!-- Company Name -->
       <div class="form-group">
         <label for="name" class="form-label">Company Name *</label>
@@ -83,6 +123,10 @@
           placeholder="Brief description about the company"
         ></textarea>
       </div>
+    </div>
+
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
     </div>
 
     <!-- Form Actions -->
