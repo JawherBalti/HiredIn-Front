@@ -11,6 +11,7 @@ import { ApplyToJob } from './components/apply-to-job/apply-to-job';
 import { Notifications } from './components/notifications/notifications';
 import { AuthGuard } from './guards/auth-guard';
 import { CurrentUserJobOfferList } from './components/current-user-job-offer-list/current-user-job-offer-list';
+import { CurrentUserCompanies } from './components/current-user-companies/current-user-companies';
 
 export const routes: Routes = [
     { path: '', component: LandingPage },
@@ -18,13 +19,15 @@ export const routes: Routes = [
     { path: 'register', component: Register }, // Create this later
     { path: 'job-offers', component: JobOfferList, canActivate: [AuthGuard] },
     { path: 'job-offers/create', component: JobOfferForm, canActivate: [AuthGuard] },
-    { path: 'company/create', component: CompanyForm, canActivate: [AuthGuard] },
     { path: 'job-offers/:id/edit', component: JobOfferForm, canActivate: [AuthGuard] },
+    { path: 'company/create', component: CompanyForm, canActivate: [AuthGuard] },
+    { path: 'company/:id/edit', component: CompanyForm, canActivate: [AuthGuard] },
     { path: 'job-offers/:id', component: JobOfferDetails, canActivate: [AuthGuard] },
     { path: 'jobs/:id/apply', component: ApplyToJob, canActivate: [AuthGuard] },
     { path: 'jobs/:id/applications', component: JobApplications, canActivate: [AuthGuard] },
     { path: 'notifications', component: Notifications, canActivate: [AuthGuard]},
-    { path: 'current-user-job-offers', component: CurrentUserJobOfferList, canActivate: [AuthGuard]}
+    { path: 'current-user-job-offers', component: CurrentUserJobOfferList, canActivate: [AuthGuard]},
+    { path: 'companies', component: CurrentUserCompanies, canActivate: [AuthGuard]}
 //   { path: 'apply', component: ApplyComponent, canActivate: [AuthGuard]  }, // Create this later
 //   { 
 //     path: 'dashboard', 
