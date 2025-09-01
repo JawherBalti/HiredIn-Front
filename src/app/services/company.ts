@@ -15,6 +15,10 @@ export class CompanyService {
     return this.http.get<CompanyModel[]>(this.apiUrl + 'companies/');
   }
 
+  getCompanyById(id: number): Observable<CompanyModel> {
+    return this.http.get<CompanyModel>(this.apiUrl + `company/${id}`);
+  }
+
   getCurrentUserCompanies(): Observable<CompanyModel[]> {
     return this.http.get<CompanyModel[]>(this.apiUrl + 'companies/current-user-companies');
   }
@@ -26,7 +30,7 @@ export class CompanyService {
   }
 
   updateCompany(id: number, company: CompanyModel): Observable<CompanyModel> {
-    return this.http.put<CompanyModel>(`${this.apiUrl}/${id}`, company);
+    return this.http.post<CompanyModel>(`${this.apiUrl}company/update/${id}`, company);
   }
 
   deleteCompany(id: number): Observable<void> {
