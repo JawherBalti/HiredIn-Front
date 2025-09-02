@@ -400,3 +400,158 @@
   color: #3f51b5
 }
 
+.search-container {
+  flex: 1;
+}
+
+.search-field {
+  width: 100%;
+  max-width: 400px;
+}
+
+.search-icon {
+  color: white !important;
+}
+
+
+/* Fallback for some versions/browsers */
+::ng-deep .white-outline .mdc-notched-outline__leading,
+::ng-deep .white-outline .mdc-notched-outline__notch,
+::ng-deep .white-outline .mdc-notched-outline__trailing,
+::ng-deep .custom-outline .mdc-notched-outline__leading,
+::ng-deep .custom-outline .mdc-notched-outline__notch,
+::ng-deep .custom-outline .mdc-notched-outline__trailing {
+  border-color: #fff !important;
+}
+
+::ng-deep .custom-outline .mdc-notched-outline__notch,
+::ng-deep .white-outline .mdc-notched-outline__notch {
+  border-left: none !important;   /* removes the vertical divider */
+}
+
+::ng-deep .white-outline .mat-mdc-input-element {
+  color: #fff !important;
+}
+
+/* Default state → hide placeholder */
+::ng-deep.white-outline .mat-mdc-input-element::placeholder {
+  color: transparent !important;
+}
+
+/* Focused state → show placeholder in white */
+::ng-deep.white-outline .mat-mdc-input-element:focus::placeholder {
+  color: #fff !important;
+  opacity: 1 !important;
+}
+
+.date-picker-container {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Add responsive design */
+@media (max-width: 768px) {
+  .search-field {
+    width: 100%;
+  }
+}
+
+.search-filter-container {
+  margin: 20px 0;
+  padding: 30px 20px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  border-radius: 20px;
+  background-color: #3f51b5;
+}
+
+.search-field {
+  flex: 1;
+  min-width: 250px;
+  max-width: 400px;
+}
+
+.filter-controls {
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;  
+}
+
+.filter-field {
+  min-width: 150px;
+  max-width: 200px;
+}
+
+.date-range-container {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.date-field {
+  min-width: 120px;
+  max-width: 150px;
+}
+
+.search-button,
+.clear-button {
+  white-space: nowrap;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .search-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .search-field {
+    width: 100%;
+    max-width: none;
+  }
+  
+  .filter-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filter-field {
+    width: 100%;
+    max-width: none;
+  }
+  
+  .date-range-container {
+    flex-direction: column;
+  }
+  
+  .date-field {
+    width: 100%;
+  }
+  
+  .search-button,
+  .clear-button {
+    width: 100%;
+  }
+}
+
+.custom-outline .mat-mdc-form-field-outline {
+  color: #1976d2 !important;         /* label and outline */
+  border-color: #1976d2 !important;  /* main border */
+}
+
+.custom-outline.mat-focused .mat-mdc-form-field-outline-thick {
+  border-color: #ff5722 !important;  /* focused border */
+}
+
+::ng-deep .custom-outline .mat-mdc-select-arrow svg {
+    fill: white;
+}
+
+mat-select {
+  border-color: white !important;
+}
+
+mat-select, mat-label {
+  color: white;
+}

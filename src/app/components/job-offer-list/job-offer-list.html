@@ -24,19 +24,120 @@
       (click)="setActiveStatus(status)"
     >
       {{ status | titlecase }}
-      <span class="count-badge">
-        <!-- Special handling for counts
-        <ng-container *ngIf="status === 'offer'">
-          ({{ filteredJobs[status].length || 0 }})
-        </ng-container>
-        <ng-container *ngIf="status === 'applied'">
-          ({{ appliedJobs.length || 0 }})
-        </ng-container>
-        <ng-container *ngIf="status === 'interview'">
-          ({{ interviews.length || 0 }})
-        </ng-container> -->
-      </span>
     </button>
+  </div>
+  <div class="search-filter-container">
+    <!-- search bar -->
+    <div class="search-container">
+      <mat-form-field appearance="outline" class="search-field white-outline">
+        <mat-label>Search {{ jobCategory }}</mat-label>
+        <input
+          matInput
+          type="text"
+          [value]="searchQuery"
+          (input)="onSearchInput($event)"
+          (keyup.enter)="onSearch()"
+          placeholder="Search by job title, company, location..."
+        />
+        <mat-icon class="search-icon" matSuffix>search</mat-icon>
+      </mat-form-field>
+      <div>
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="onSearch()"
+          class="search-button"
+        >
+          Search
+        </button>
+      </div>
+    </div>
+    <!-- Filter Controls -->
+    <div class="filter-controls">
+      <!-- Job Type Filter -->
+      <mat-form-field appearance="outline" class="filter-field custom-outline">
+        <mat-label>Job Type</mat-label>
+        <mat-select
+          [(value)]="jobTypeFilter"
+          (selectionChange)="onFilterChange()"
+        >
+          <mat-option value="">All Types</mat-option>
+          <mat-option value="remote">Remote</mat-option>
+          <mat-option value="onsite">On-site</mat-option>
+          <mat-option value="hybrid">Hybrid</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Industry Filter -->
+      <mat-form-field appearance="outline" class="filter-field custom-outline">
+        <mat-label>Industry</mat-label>
+        <mat-select
+          [(value)]="industryFilter"
+          (selectionChange)="onFilterChange()"
+        >
+          <mat-option value="">All Industries</mat-option>
+          <mat-option *ngFor="let industry of industries" [value]="industry">
+            {{ industry || "All Industries" }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div class="date-picker-container">
+        <!-- Date Filter -->
+        <mat-form-field
+          appearance="outline"
+          class="filter-field custom-outline"
+        >
+          <mat-label>Date Posted</mat-label>
+          <mat-select
+            [(value)]="dateFilter"
+            (selectionChange)="onFilterChange()"
+          >
+            <mat-option
+              *ngFor="let filter of dateFilters"
+              [value]="filter.value"
+            >
+              {{ filter.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Custom Date Range (shown only when custom is selected) -->
+        <div *ngIf="dateFilter === 'custom'" class="date-range-container">
+          <mat-form-field appearance="outline" class="date-field white-outline">
+            <mat-label>From</mat-label>
+            <input
+              matInput
+              [matDatepicker]="startPicker"
+              [(ngModel)]="startDate"
+              (dateChange)="onDateRangeChange()"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="startPicker"
+              class="search-icon"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #startPicker></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="date-field white-outline">
+            <mat-label>To</mat-label>
+            <input
+              matInput
+              [matDatepicker]="endPicker"
+              [(ngModel)]="endDate"
+              (dateChange)="onDateRangeChange()"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="endPicker"
+              class="search-icon"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #endPicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Job Cards Grid -->
@@ -204,7 +305,6 @@
             >
               View Job
             </button>
-            <button mat-stroked-button class="view-button">Details</button>
           </div>
         </div>
       </div>

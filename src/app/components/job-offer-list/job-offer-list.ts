@@ -15,30 +15,62 @@ import { Auth } from '../../services/auth';
 import { ResumeService } from '../../services/resume';
 import { Interview } from '../../models/interview.model';
 import { InterviewService } from '../../services/interview';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatOption, MatSelect, MatSelectModule } from '@angular/material/select';
+import { MatDatepicker, MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-job-offer-list',
   standalone: true,
   imports: [
+    FormsModule,
     CommonModule,
     DragDropModule,
     RouterLink,
     MatButtonModule,
     MatIconModule,
-    DateAgoPipe, // Add this line
-  ], // Add DragDropModule here],
+    MatInputModule,
+    MatFormFieldModule,
+    DateAgoPipe,
+    MatSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+  ],
   templateUrl: './job-offer-list.html',
   styleUrl: './job-offer-list.css',
 })
 export class JobOfferList implements OnInit {
+  // Remove searchControl and use simple properties
+  searchQuery: string = '';
+  // Filter properties
+  jobTypeFilter: string = '';
+  industryFilter: string = '';
+  dateFilter: string = '';
+  startDate: Date | null = null;
+  endDate: Date | null = null;
+
+  // Available options for filters
+  jobTypes = ['', 'remote', 'onsite', 'hybrid'];
+  industries: string[] = [];
+  dateFilters = [
+    { value: '', label: 'Any time' },
+    { value: 'today', label: 'Today' },
+    { value: 'week', label: 'This week' },
+    { value: 'month', label: 'This month' },
+    { value: 'custom', label: 'Custom range' },
+  ];
+
   jobOffers: JobOfferModel[] = [];
-  interviews: Interview[] = []; // Update the type
-  appliedJobs: any[] = []; // Add this line for storing applied jobs
+  interviews: Interview[] = [];
+  appliedJobs: any[] = [];
   filteredJobs: { [status: string]: JobOfferModel[] } = {};
   statuses = ['offer', 'applied', 'interview'];
   loading = true;
   errorMessage = '';
-  activeStatus = 'offer'; // Default active tab
+  activeStatus = 'offer';
   jobCategory: string = 'Offers';
   currentUser: any = null;
   currentUserId: any = null;
@@ -75,12 +107,96 @@ export class JobOfferList implements OnInit {
     this.currentUser = this.authService.getCurrentUser();
     this.currentUserId = this.authService.getCurrentUser().id;
     this.loadJobOffers();
-    this.loadAppliedJobs(); // Load applied jobs on init
+    this.loadAppliedJobs();
     this.loadInterviews(this.currentUserId);
+    this.loadIndustries();
+  }
+
+  loadIndustries(): void {
+    // You might want to load this from an API or use a predefined list
+    this.industries = [
+      '',
+      'Technology',
+      'Healthcare',
+      'Finance',
+      'Education',
+      'Manufacturing',
+      'Retail',
+      'Hospitality',
+      'Marketing',
+      'Other',
+    ];
+  }
+
+  onSearchInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.searchQuery = input.value;
+  }
+
+  onSearch(): void {
+    this.performSearch();
+  }
+
+  clearSearch(): void {
+    this.searchQuery = '';
+    this.jobTypeFilter = '';
+    this.industryFilter = '';
+    this.dateFilter = '';
+    this.startDate = null;
+    this.endDate = null;
+    this.performSearch();
+  }
+
+  onFilterChange(): void {
+    // Reset to first page when filters change
+    this.currentPage = 1;
+    this.appliedCurrentPage = 1;
+    this.interviewsCurrentPage = 1;
+    this.performSearch();
+  }
+
+  onDateRangeChange(): void {
+    if (this.dateFilter === 'custom' && this.startDate && this.endDate) {
+      this.onFilterChange();
+    }
+  }
+
+  getFilters(): any {
+    const filters: any = {
+      search: this.searchQuery,
+      job_type: this.jobTypeFilter,
+      industry: this.industryFilter,
+      date_filter: this.dateFilter,
+    };
+
+    if (this.dateFilter === 'custom' && this.startDate && this.endDate) {
+      filters.start_date = this.startDate.toISOString().split('T')[0];
+      filters.end_date = this.endDate.toISOString().split('T')[0];
+    }
+
+    return filters;
+  }
+
+  performSearch(): void {
+    // Reset to first page when searching
+    this.currentPage = 1;
+    this.appliedCurrentPage = 1;
+    this.interviewsCurrentPage = 1;
+
+    switch (this.activeStatus) {
+      case 'offer':
+        this.loadJobOffers();
+        break;
+      case 'applied':
+        this.loadAppliedJobs();
+        break;
+      case 'interview':
+        this.loadInterviews(this.currentUserId);
+        break;
+    }
   }
 
   isJobCreator(jobOffer: any): boolean {
-    // Check if current user exists and matches the job offer's user_id
     return this.currentUser && this.currentUser.id === jobOffer.user_id;
   }
 
@@ -96,7 +212,6 @@ export class JobOfferList implements OnInit {
         break;
       case 'interview':
         this.jobCategory = 'Interviews';
-        // Map interviews to job offers format when switching to interview tab
         this.filteredJobs['interview'] = this.mapInterviewsToJobOffers(
           this.interviews
         );
@@ -107,20 +222,21 @@ export class JobOfferList implements OnInit {
   }
 
   loadInterviews(userId: number): void {
+    const filters = this.getFilters();
+
     this.interviewService
       .getInterviewsByApplicant(
         userId,
         this.interviewsCurrentPage,
-        this.interviewsItemsPerPage
+        this.interviewsItemsPerPage,
+        filters
       )
       .subscribe({
         next: (response: any) => {
-          // Handle both old array format and new paginated format
           let interviewsData: any[];
           let paginationInfo: any = null;
 
           if (Array.isArray(response)) {
-            // Old format - no pagination
             interviewsData = response;
             this.interviews = interviewsData;
             this.interviewsTotalItems = interviewsData.length;
@@ -129,7 +245,6 @@ export class JobOfferList implements OnInit {
             );
             this.interviewsPaginationInfo = `Showing all ${interviewsData.length} interviews`;
           } else if (response.data && response.pagination) {
-            // New paginated format
             interviewsData = response.data;
             paginationInfo = response.pagination;
             this.interviews = interviewsData;
@@ -137,7 +252,6 @@ export class JobOfferList implements OnInit {
             this.interviewsTotalPages = paginationInfo.last_page;
             this.updateInterviewsPaginationInfo(paginationInfo);
           } else {
-            // Fallback
             interviewsData = response;
             this.interviews = interviewsData;
             this.interviewsTotalItems = interviewsData.length;
@@ -162,7 +276,6 @@ export class JobOfferList implements OnInit {
     this.interviewsPaginationInfo = `Showing ${pagination.from} to ${pagination.to} of ${pagination.total} interviews`;
   }
 
-  // Interviews pagination methods
   goToInterviewsPage(page: number): void {
     if (
       page >= 1 &&
@@ -201,16 +314,20 @@ export class JobOfferList implements OnInit {
   }
 
   loadAppliedJobs(): void {
+    const filters = this.getFilters();
+
     this.resumeService
-      .getUserApplications(this.appliedCurrentPage, this.appliedItemsPerPage)
+      .getUserApplications(
+        this.appliedCurrentPage,
+        this.appliedItemsPerPage,
+        filters
+      )
       .subscribe({
         next: (response: any) => {
-          // Handle both old array format and new paginated format
           let applications: any[];
           let paginationInfo: any = null;
 
           if (Array.isArray(response)) {
-            // Old format - no pagination
             applications = response;
             this.appliedTotalItems = applications.length;
             this.appliedTotalPages = Math.ceil(
@@ -218,14 +335,12 @@ export class JobOfferList implements OnInit {
             );
             this.appliedPaginationInfo = `Showing all ${applications.length} applications`;
           } else if (response.data && response.pagination) {
-            // New paginated format
             applications = response.data;
             paginationInfo = response.pagination;
             this.appliedTotalItems = paginationInfo.total;
             this.appliedTotalPages = paginationInfo.last_page;
             this.updateAppliedPaginationInfo(paginationInfo);
           } else {
-            // Fallback
             applications = response;
             this.appliedTotalItems = applications.length;
             this.appliedTotalPages = 1;
@@ -233,12 +348,12 @@ export class JobOfferList implements OnInit {
           }
 
           this.appliedJobs = applications.map((app: any) => ({
-            ...app.job_offer, // This should now work with the correct structure
+            ...app.job_offer,
             application_status: app.status,
             applied_at: app.applied_at,
             resume_id: app.resume_id,
             cover_letter: app.cover_letter,
-            interview: app.interview, // Include interview data if needed
+            interview: app.interview,
           }));
 
           if (this.activeStatus === 'applied') {
@@ -255,7 +370,6 @@ export class JobOfferList implements OnInit {
     this.appliedPaginationInfo = `Showing ${pagination.from} to ${pagination.to} of ${pagination.total} applications`;
   }
 
-  // Applied jobs pagination methods
   goToAppliedPage(page: number): void {
     if (
       page >= 1 &&
@@ -283,8 +397,10 @@ export class JobOfferList implements OnInit {
 
   loadJobOffers(): void {
     this.loading = true;
+    const filters = this.getFilters();
+
     this.jobOfferService
-      .getJobOffers(this.currentPage, this.itemsPerPage)
+      .getJobOffers(this.currentPage, this.itemsPerPage, filters)
       .subscribe({
         next: (response: PaginatedResponse<JobOfferModel>) => {
           this.jobOffers = response.data;
@@ -307,13 +423,13 @@ export class JobOfferList implements OnInit {
     this.paginationInfo = `Showing ${pagination.from} to ${pagination.to} of ${pagination.total} entries`;
   }
 
-  // Pagination methods
   goToPage(page: number): void {
     if (page >= 1 && page <= this.totalPages && page !== this.currentPage) {
       this.currentPage = page;
       this.loadJobOffers();
     }
   }
+
   nextPage(): void {
     if (this.currentPage < this.totalPages) {
       this.currentPage++;
