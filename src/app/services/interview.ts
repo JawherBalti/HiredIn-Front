@@ -45,11 +45,25 @@ export class InterviewService {
   }
 
   // src/app/services/interview.service.ts
-  getInterviewsByApplicant(userId: number, page: number = 1, perPage: number = 5): Observable<PaginatedInterviewsResponse> {
+  getInterviewsByApplicant(
+    userId: number, 
+    page: number = 1, 
+    perPage: number = 5,
+    filters: any = []
+  ): Observable<PaginatedInterviewsResponse> {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('per_page', perPage.toString());
 
-    return this.http.get<PaginatedInterviewsResponse>(`${this.apiUrl}/users/${userId}/interviews`, { params });
+    Object.keys(filters).forEach(key => {
+      if (filters[key]) {
+        params = params.set(key, filters[key]);
+      }
+    });
+
+    return this.http.get<PaginatedInterviewsResponse>(
+      `${this.apiUrl}/users/${userId}/interviews`, 
+      { params }
+    );
   }
 }
