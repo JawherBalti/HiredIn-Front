@@ -25,11 +25,18 @@ export class JobOfferService {
 
   getJobOffers(
     page: number = 1,
-    perPage: number = 5
+    perPage: number = 5,
+    filters: any = []
   ): Observable<PaginatedResponse<JobOfferModel>> {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('per_page', perPage.toString());
+
+    Object.keys(filters).forEach(key => {
+      if (filters[key]) {
+        params = params.set(key, filters[key]);
+      }
+    });
 
     return this.http.get<PaginatedResponse<JobOfferModel>>(this.apiUrl, {
       params,
