@@ -15,7 +15,6 @@ export interface PaginatedApplicationsResponse {
   };
 }
 
-
 @Injectable({
   providedIn: 'root',
 })
@@ -38,24 +37,38 @@ export class ResumeService {
     return this.http.post(`${this.apiUrl}/${jobOfferId}/apply`, formData);
   }
 
-  getApplicationsForJob(jobOfferId: number, page: number = 1, perPage: number = 10): Observable<PaginatedApplicationsResponse> {
-    let params = new HttpParams()
-      .set('page', page.toString())
-      .set('per_page', perPage.toString());
-
-    return this.http.get<PaginatedApplicationsResponse>(`${this.apiUrl}/${jobOfferId}/applications`, {
-      headers: this.getAuthHeaders(),
-      params: params
-    });
-  }
-
-  getUserApplications(
+  getApplicationsForJob(
+    jobOfferId: number,
     page: number = 1,
-    perPage: number = 9
+    perPage: number = 10
   ): Observable<PaginatedApplicationsResponse> {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('per_page', perPage.toString());
+
+    return this.http.get<PaginatedApplicationsResponse>(
+      `${this.apiUrl}/${jobOfferId}/applications`,
+      {
+        headers: this.getAuthHeaders(),
+        params: params,
+      }
+    );
+  }
+
+  getUserApplications(
+    page: number = 1,
+    perPage: number = 9,
+    filters: any = []
+  ): Observable<PaginatedApplicationsResponse> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('per_page', perPage.toString());
+
+    Object.keys(filters).forEach((key) => {
+      if (filters[key]) {
+        params = params.set(key, filters[key]);
+      }
+    });
 
     return this.http.get<PaginatedApplicationsResponse>(
       `${this.apiUrl}/user/applications`,
