@@ -5,6 +5,126 @@
     </button>
     My Job Offers
   </h2>
+
+  <!-- Search and Filters -->
+  <div class="search-filter-container">
+    <!-- search bar -->
+    <div class="search-container">
+      <div class="search-bar">
+        <mat-form-field appearance="outline" class="search-field white-outline">
+          <mat-label>Search My Job Offers</mat-label>
+          <input
+            matInput
+            type="text"
+            [value]="searchQuery"
+            (input)="onSearchInput($event)"
+            (keyup.enter)="onSearch()"
+            placeholder="Search by job title, company, location..."
+          />
+        </mat-form-field>
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="onSearch()"
+          class="search-button"
+        >
+          <mat-icon *ngIf="!searchLoading" class="search-icon" matSuffix
+            >search</mat-icon
+          >
+          <div class="white-spinner">
+            <mat-spinner *ngIf="searchLoading" diameter="25"></mat-spinner>
+          </div>
+        </button>
+      </div>
+    </div>
+    <!-- Filter Controls -->
+    <div class="filter-controls">
+      <!-- Job Type Filter -->
+      <mat-form-field appearance="outline" class="filter-field custom-outline">
+        <mat-label>Job Type</mat-label>
+        <mat-select
+          [(value)]="jobTypeFilter"
+          (selectionChange)="onFilterChange()"
+        >
+          <mat-option value="">All Types</mat-option>
+          <mat-option value="remote">Remote</mat-option>
+          <mat-option value="onsite">On-site</mat-option>
+          <mat-option value="hybrid">Hybrid</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Industry Filter -->
+      <mat-form-field appearance="outline" class="filter-field custom-outline">
+        <mat-label>Industry</mat-label>
+        <mat-select
+          [(value)]="industryFilter"
+          (selectionChange)="onFilterChange()"
+        >
+          <mat-option value="">All Industries</mat-option>
+          <mat-option *ngFor="let industry of industries" [value]="industry">
+            {{ industry || "All Industries" }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div class="date-picker-container">
+        <!-- Date Filter -->
+        <mat-form-field
+          appearance="outline"
+          class="filter-field custom-outline"
+        >
+          <mat-label>Date Posted</mat-label>
+          <mat-select
+            [(value)]="dateFilter"
+            (selectionChange)="onFilterChange()"
+          >
+            <mat-option
+              *ngFor="let filter of dateFilters"
+              [value]="filter.value"
+            >
+              {{ filter.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Custom Date Range (shown only when custom is selected) -->
+        <div *ngIf="dateFilter === 'custom'" class="date-range-container">
+          <mat-form-field appearance="outline" class="date-field date-white-outline">
+            <mat-label>From</mat-label>
+            <input
+              matInput
+              [matDatepicker]="startPicker"
+              [(ngModel)]="startDate"
+              (dateChange)="onDateRangeChange()"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="startPicker"
+              class="search-icon"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #startPicker></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="date-field date-white-outline">
+            <mat-label>To</mat-label>
+            <input
+              matInput
+              [matDatepicker]="endPicker"
+              [(ngModel)]="endDate"
+              (dateChange)="onDateRangeChange()"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="endPicker"
+              class="search-icon"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #endPicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Loading State -->
   <div *ngIf="loading" class="loading-overlay active">
     <div class="spinner"></div>
@@ -76,6 +196,16 @@
       </div>
     </div>
   </div>
+
+  <!-- No Results Message -->
+  <div *ngIf="!loading && jobOffers.length === 0" class="no-jobs-message">
+    <mat-icon>work_outline</mat-icon>
+    <p>No job offers found</p>
+    <p *ngIf="searchQuery || jobTypeFilter || industryFilter || statusFilter || dateFilter">
+      Try adjusting your filters or search terms
+    </p>
+  </div>
+
   <!-- Pagination Controls -->
   <div *ngIf="totalPages > 1" class="pagination-controls">
     <div class="pagination-info">

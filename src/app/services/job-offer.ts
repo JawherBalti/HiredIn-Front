@@ -32,7 +32,7 @@ export class JobOfferService {
       .set('page', page.toString())
       .set('per_page', perPage.toString());
 
-    Object.keys(filters).forEach(key => {
+    Object.keys(filters).forEach((key) => {
       if (filters[key]) {
         params = params.set(key, filters[key]);
       }
@@ -43,14 +43,28 @@ export class JobOfferService {
     });
   }
 
-  getCurrentUserJobs(page: number = 1, perPage: number = 10): Observable<PaginatedResponse<JobOfferModel>> {
+  getCurrentUserJobs(
+    page: number = 1,
+    perPage: number = 10,
+    filters: any = {}
+  ): Observable<PaginatedResponse<JobOfferModel>> {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('per_page', perPage.toString());
 
-    return this.http.get<PaginatedResponse<JobOfferModel>>(`${this.apiUrl}current-user-job-offers`, { params });
+    // Add filter parameters
+    Object.keys(filters).forEach((key) => {
+      if (filters[key]) {
+        params = params.set(key, filters[key]);
+      }
+    });
+
+    return this.http.get<PaginatedResponse<JobOfferModel>>(
+      `${this.apiUrl}current-user-job-offers`,
+      { params }
+    );
   }
-  
+
   getRecentJobOffers(): Observable<JobOfferModel[]> {
     return this.http.get<JobOfferModel[]>(`${this.apiUrl}recent-job-offers`);
   }
