@@ -230,7 +230,9 @@
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Error State */
@@ -256,12 +258,12 @@
   .jobs-section {
     padding: 2rem 1rem;
   }
-  
+
   .status-tabs {
     flex-direction: column;
     align-items: center;
   }
-  
+
   .jobs-grid {
     grid-template-columns: 1fr;
   }
@@ -385,7 +387,7 @@
 .page-button {
   min-width: auto;
   padding: 0.5rem 1rem;
-  color: #3f51b5
+  color: #3f51b5;
 }
 
 .page-button.active {
@@ -397,39 +399,41 @@
   opacity: 0.5;
   cursor: not-allowed;
   background-color: #cbd5e0;
-  color: #3f51b5
+  color: #3f51b5;
 }
 
 .search-container {
   flex: 1;
 }
 
-.search-field {
-  width: 100%;
-  max-width: 400px;
-}
-
 .search-icon {
   color: white !important;
 }
-
 
 /* Fallback for some versions/browsers */
 ::ng-deep .white-outline .mdc-notched-outline__leading,
 ::ng-deep .white-outline .mdc-notched-outline__notch,
 ::ng-deep .white-outline .mdc-notched-outline__trailing,
+::ng-deep .date-white-outline .mdc-notched-outline__leading,
+::ng-deep .date-white-outline .mdc-notched-outline__notch,
+::ng-deep .date-white-outline .mdc-notched-outline__trailing,
 ::ng-deep .custom-outline .mdc-notched-outline__leading,
 ::ng-deep .custom-outline .mdc-notched-outline__notch,
 ::ng-deep .custom-outline .mdc-notched-outline__trailing {
   border-color: #fff !important;
 }
-
-::ng-deep .custom-outline .mdc-notched-outline__notch,
-::ng-deep .white-outline .mdc-notched-outline__notch {
-  border-left: none !important;   /* removes the vertical divider */
+::ng-deep .white-outline .mdc-notched-outline__trailing {
+  border-right: none;
 }
 
-::ng-deep .white-outline .mat-mdc-input-element {
+::ng-deep .custom-outline .mdc-notched-outline__notch,
+::ng-deep .white-outline .mdc-notched-outline__notch,
+::ng-deep .date-white-outline .mdc-notched-outline__notch {
+  border-left: none !important; /* removes the vertical divider */
+}
+
+::ng-deep .white-outline .mat-mdc-input-element,
+::ng-deep .date-white-outline .mat-mdc-input-element {
   color: #fff !important;
 }
 
@@ -457,46 +461,71 @@
 }
 
 .search-filter-container {
-  margin: 20px 0;
+  margin: 30px 0;
   padding: 30px 20px;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   border-radius: 20px;
-  background-color: #3f51b5;
+  background-color: #3f51b5ba;
 }
 
 .search-field {
   flex: 1;
   min-width: 250px;
-  max-width: 400px;
+  max-width: 350px;
+}
+
+.search-bar {
+  display: flex;
+  align-items: stretch; /* ensures equal height */
+  height: 56px; /* default mat-form-field outline height */
+}
+
+::ng-deep .white-spinner .mat-mdc-progress-spinner circle {
+  stroke: #fff !important;
+}
+
+.search-button {
+  background-color: #3f51b5 !important;
+  border-radius: 0px;
+  border-bottom-right-radius: 5px;
+  border-top-right-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* Reset Angular Material defaults */
+  min-width: 0; /* remove default min-width */
+  min-height: 0; /* remove default min-height */
+  line-height: normal; /* prevents vertical offset */
+  padding: 0 16px; /* horizontal padding */
+  height: 56px; /* match mat-form-field height */
+  border: 1px solid white;
+  border-left: none;
+}
+
+.search-button .mat-icon {
+  font-size: 24px; /* control icon size */
 }
 
 .filter-controls {
   display: flex;
   gap: 15px;
-  align-items: flex-start;  
+  align-items: flex-start;
 }
 
-.filter-field {
+.filter-field,
+.date-field {
   min-width: 150px;
   max-width: 200px;
 }
 
 .date-range-container {
   display: flex;
-  gap: 10px;
+  flex-direction: column;
+  gap: 0px;
   align-items: center;
-}
-
-.date-field {
-  min-width: 120px;
-  max-width: 150px;
-}
-
-.search-button,
-.clear-button {
-  white-space: nowrap;
 }
 
 /* Responsive design */
@@ -505,53 +534,53 @@
     flex-direction: column;
     align-items: stretch;
   }
-  
+
   .search-field {
     width: 100%;
     max-width: none;
   }
-  
+
   .filter-controls {
     flex-direction: column;
     align-items: stretch;
   }
-  
+
   .filter-field {
     width: 100%;
     max-width: none;
   }
-  
+
   .date-range-container {
     flex-direction: column;
   }
-  
+
   .date-field {
     width: 100%;
   }
-  
-  .search-button,
-  .clear-button {
+
+  .search-button {
     width: 100%;
   }
 }
 
 .custom-outline .mat-mdc-form-field-outline {
-  color: #1976d2 !important;         /* label and outline */
-  border-color: #1976d2 !important;  /* main border */
+  color: #1976d2 !important; /* label and outline */
+  border-color: #1976d2 !important; /* main border */
 }
 
 .custom-outline.mat-focused .mat-mdc-form-field-outline-thick {
-  border-color: #ff5722 !important;  /* focused border */
+  border-color: #ff5722 !important; /* focused border */
 }
 
 ::ng-deep .custom-outline .mat-mdc-select-arrow svg {
-    fill: white;
+  fill: white;
 }
 
 mat-select {
   border-color: white !important;
 }
 
-mat-select, mat-label {
+mat-select,
+mat-label {
   color: white;
 }

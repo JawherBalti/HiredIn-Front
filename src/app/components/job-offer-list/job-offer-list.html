@@ -29,26 +29,30 @@
   <div class="search-filter-container">
     <!-- search bar -->
     <div class="search-container">
-      <mat-form-field appearance="outline" class="search-field white-outline">
-        <mat-label>Search {{ jobCategory }}</mat-label>
-        <input
-          matInput
-          type="text"
-          [value]="searchQuery"
-          (input)="onSearchInput($event)"
-          (keyup.enter)="onSearch()"
-          placeholder="Search by job title, company, location..."
-        />
-        <mat-icon class="search-icon" matSuffix>search</mat-icon>
-      </mat-form-field>
-      <div>
+      <div class="search-bar">
+        <mat-form-field appearance="outline" class="search-field white-outline">
+          <mat-label>Search {{ jobCategory }}</mat-label>
+          <input
+            matInput
+            type="text"
+            [value]="searchQuery"
+            (input)="onSearchInput($event)"
+            (keyup.enter)="onSearch()"
+            placeholder="Search by job title, company, location..."
+          />
+        </mat-form-field>
         <button
           mat-raised-button
           color="primary"
           (click)="onSearch()"
           class="search-button"
         >
-          Search
+          <mat-icon *ngIf="!searchLoading" class="search-icon" matSuffix
+            >search</mat-icon
+          >
+          <div class="white-spinner">
+            <mat-spinner *ngIf="searchLoading" diameter="25"></mat-spinner>
+          </div>
         </button>
       </div>
     </div>
@@ -104,7 +108,7 @@
 
         <!-- Custom Date Range (shown only when custom is selected) -->
         <div *ngIf="dateFilter === 'custom'" class="date-range-container">
-          <mat-form-field appearance="outline" class="date-field white-outline">
+          <mat-form-field appearance="outline" class="date-field date-white-outline">
             <mat-label>From</mat-label>
             <input
               matInput
@@ -120,7 +124,7 @@
             <mat-datepicker #startPicker></mat-datepicker>
           </mat-form-field>
 
-          <mat-form-field appearance="outline" class="date-field white-outline">
+          <mat-form-field appearance="outline" class="date-field date-white-outline">
             <mat-label>To</mat-label>
             <input
               matInput

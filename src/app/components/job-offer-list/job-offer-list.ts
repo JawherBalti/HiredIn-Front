@@ -17,10 +17,11 @@ import { Interview } from '../../models/interview.model';
 import { InterviewService } from '../../services/interview';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatOption, MatSelect, MatSelectModule } from '@angular/material/select';
-import { MatDatepicker, MatDatepickerModule } from '@angular/material/datepicker';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { FormsModule } from '@angular/forms';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-job-offer-list',
@@ -38,6 +39,7 @@ import { FormsModule } from '@angular/forms';
     MatSelectModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './job-offer-list.html',
   styleUrl: './job-offer-list.css',
@@ -69,6 +71,7 @@ export class JobOfferList implements OnInit {
   filteredJobs: { [status: string]: JobOfferModel[] } = {};
   statuses = ['offer', 'applied', 'interview'];
   loading = true;
+  searchLoading = false;
   errorMessage = '';
   activeStatus = 'offer';
   jobCategory: string = 'Offers';
@@ -182,7 +185,6 @@ export class JobOfferList implements OnInit {
     this.currentPage = 1;
     this.appliedCurrentPage = 1;
     this.interviewsCurrentPage = 1;
-
     switch (this.activeStatus) {
       case 'offer':
         this.loadJobOffers();
@@ -194,6 +196,7 @@ export class JobOfferList implements OnInit {
         this.loadInterviews(this.currentUserId);
         break;
     }
+    this.searchQuery = ''
   }
 
   isJobCreator(jobOffer: any): boolean {
@@ -219,9 +222,12 @@ export class JobOfferList implements OnInit {
       default:
         this.jobCategory = 'Offers';
     }
+    this.searchQuery = ''
   }
 
   loadInterviews(userId: number): void {
+          this.searchLoading = true;
+
     const filters = this.getFilters();
 
     this.interviewService
@@ -233,6 +239,8 @@ export class JobOfferList implements OnInit {
       )
       .subscribe({
         next: (response: any) => {
+          this.searchLoading = false;
+
           let interviewsData: any[];
           let paginationInfo: any = null;
 
@@ -266,6 +274,7 @@ export class JobOfferList implements OnInit {
           }
         },
         error: (error) => {
+          this.searchLoading = false;
           this.errorMessage = 'Failed to load interviews';
           console.error('Error loading interviews:', error);
         },
@@ -315,6 +324,7 @@ export class JobOfferList implements OnInit {
 
   loadAppliedJobs(): void {
     const filters = this.getFilters();
+    this.searchLoading = true;
 
     this.resumeService
       .getUserApplications(
@@ -324,6 +334,8 @@ export class JobOfferList implements OnInit {
       )
       .subscribe({
         next: (response: any) => {
+          this.searchLoading = false;
+
           let applications: any[];
           let paginationInfo: any = null;
 
@@ -361,6 +373,7 @@ export class JobOfferList implements OnInit {
           }
         },
         error: (error) => {
+          this.searchLoading = false;
           console.error('Error fetching applied jobs', error);
         },
       });
@@ -397,6 +410,7 @@ export class JobOfferList implements OnInit {
 
   loadJobOffers(): void {
     this.loading = true;
+    this.searchLoading = true;
     const filters = this.getFilters();
 
     this.jobOfferService
@@ -409,11 +423,13 @@ export class JobOfferList implements OnInit {
           this.updatePaginationInfo(response.pagination);
           this.filterJobsByStatus();
           this.loading = false;
+          this.searchLoading = false;
         },
         error: (error) => {
           this.errorMessage =
             'Failed to load job offers. Please try again later.';
           this.loading = false;
+          this.searchLoading = false;
           console.error('Error fetching job offers', error);
         },
       });
