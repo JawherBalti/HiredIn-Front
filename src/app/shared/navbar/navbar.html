@@ -20,6 +20,12 @@
         <div class="user-menu">
           <div class="avatar" (click)="toggleMenu()">
             <img
+            *ngIf="currentUserAvatar"
+              [src]='currentUserAvatar'
+              alt="User Avatar"
+            />
+            <img
+            *ngIf="!currentUserAvatar"
               src="https://cdn-icons-png.flaticon.com/512/1253/1253756.png"
               alt="User Avatar"
             />

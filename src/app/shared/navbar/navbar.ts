@@ -23,6 +23,7 @@ export class Navbar implements OnInit {
   showMenu = false;
   showMobileMenu = false;
   unreadCount = 0;
+  currentUserAvatar: any = null;
   private countSubscription!: Subscription;
   private loginSubscription!: Subscription;
 
@@ -56,6 +57,8 @@ export class Navbar implements OnInit {
   }
 
   ngOnInit(): void {
+    this.currentUserAvatar = this.authService.getCurrentUser().avatar;
+    console.log(this.currentUserAvatar)
     this.countSubscription = this.notifService.unreadCount$.subscribe(
       (count) => {
         this.unreadCount = count;
