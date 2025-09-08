@@ -24,6 +24,12 @@ export class Auth {
     this.checkAuthStatus();
   }
 
+  // Google login methods
+  googleLogin() {
+    // Use redirect approach instead of popup
+    window.location.href = `${this.apiUrl}/auth/google`;
+  }
+
   private checkAuthStatus() {
     const token = localStorage.getItem('auth_token');
     this.isAuthenticatedSubject.next(!!token);
@@ -64,7 +70,7 @@ export class Auth {
       );
   }
 
-  private storeAuthData(response: LoginResponse) {
+  public storeAuthData(response: LoginResponse) {
     localStorage.setItem('auth_token', response.token);
     localStorage.setItem('user', JSON.stringify(response.user));
     this.isAuthenticatedSubject.next(true);
