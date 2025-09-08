@@ -28,19 +28,32 @@
 
     <button mat-raised-button color="primary" type="submit" [disabled]="loading">
       <span *ngIf="!loading">Sign In</span>
-      <span *ngIf="loading">
-        <mat-icon class="spinner">hourglass_empty</mat-icon>
-        Signing in...
-      </span>
+        <mat-spinner
+          *ngIf="loading"
+          diameter="20"
+          class="spinner"
+        ></mat-spinner>
     </button>
 
     <div *ngIf="error" class="error-message">
       <mat-icon>error</mat-icon>
       {{ error }}
     </div>
-
-    <div class="register-link">
-      Don't have an account? <a routerLink="/register">Create one</a>
-    </div>
   </form>
+
+  <!-- Google Login Button -->
+  <div class="social-login">
+    <div class="divider">
+      <span>Or continue with</span>
+    </div>
+    
+    <button mat-raised-button class="google-btn" (click)="loginWithGoogle()" [disabled]="loading">
+      <img src="assets/images/google_login_logo.png" alt="Google" class="google-icon">
+      Sign in with Google
+    </button>
+  </div>
+
+  <div class="register-link">
+    Don't have an account? <a routerLink="/register">Create one</a>
+  </div>
 </div>
