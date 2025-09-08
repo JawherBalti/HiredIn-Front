@@ -12,10 +12,12 @@ import { Notifications } from './components/notifications/notifications';
 import { AuthGuard } from './guards/auth-guard';
 import { CurrentUserJobOfferList } from './components/current-user-job-offer-list/current-user-job-offer-list';
 import { CurrentUserCompanies } from './components/current-user-companies/current-user-companies';
+import { AuthCallbackComponent } from './components/auth-callback/auth-callback';
 
 export const routes: Routes = [
     { path: '', component: LandingPage },
     { path: 'login', component: Login },
+    { path: 'auth/callback', component: AuthCallbackComponent },
     { path: 'register', component: Register }, // Create this later
     { path: 'job-offers', component: JobOfferList, canActivate: [AuthGuard] },
     { path: 'job-offers/create', component: JobOfferForm, canActivate: [AuthGuard] },
