@@ -59,3 +59,13 @@ button[type="submit"] {
 .login-link a:hover {
   text-decoration: underline;
 }
+
+.spinner {
+  animation: spin 1s linear infinite;
+  margin-right: 8px;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
