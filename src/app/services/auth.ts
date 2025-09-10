@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, tap } from 'rxjs';
+import { EchoService } from './echo';
 
 interface LoginResponse {
   user: any;
@@ -20,7 +21,11 @@ export class Auth {
   private loginStatus = new BehaviorSubject<boolean>(this.isLoggedIn());
   public loginStatus$ = this.loginStatus.asObservable();
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private echoService: EchoService
+  ) {
     this.checkAuthStatus();
   }
 
@@ -80,6 +85,9 @@ export class Auth {
     localStorage.removeItem('auth_token');
     localStorage.removeItem('user');
     this.isAuthenticatedSubject.next(false);
+
+    // Disconnect Echo when user logs out
+    this.echoService.disconnect();
   }
 
   // Add to your AuthService
