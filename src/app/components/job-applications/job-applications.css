@@ -234,6 +234,7 @@
   line-height: 1.6;
   white-space: pre-wrap;
   font-size: 0.95rem;
+  word-break: break-all;
 }
 
 /* Interview Section */
@@ -281,6 +282,7 @@
 .interview-details p {
   color: #374151;
   margin-bottom: 0.5rem;
+  word-break: break-all;
 }
 
 .interview-details strong {

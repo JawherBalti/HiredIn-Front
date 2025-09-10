@@ -241,6 +241,10 @@
                   <mat-icon>attach_money</mat-icon>
                   {{ job.salary || "Negotiable" }}
                 </span>
+                <span class="deadline" *ngIf="job.deadline">
+                  <mat-icon>event</mat-icon>
+                  {{ job.deadline | date }}
+                </span>
               </div>
             </div>
           </div>
