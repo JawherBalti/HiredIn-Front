@@ -1,4 +1,174 @@
-/* You can add global styles to this file, and also import other style files */
+/* Simple Toast Notification Styles */
+.simple-toast {
+  position: fixed;
+  top: 80px; /* Below navbar */
+  right: 20px;
+  min-width: 300px;
+  max-width: 400px;
+  background: white;
+  border-left: 4px solid #2196f3; /* Default blue border */
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 16px;
+  z-index: 1000;
+  animation: slideIn 0.3s ease-out;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+/* Success variant */
+.simple-toast[data-type="success"] {
+  border-left-color: #4caf50;
+  background: linear-gradient(135deg, #f1f8e9 0%, #b9f0be 100%);
+}
+
+/* Error variant */
+.simple-toast[data-type="error"] {
+  border-left-color: #f44336;
+  background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+}
+
+/* Warning variant */
+.simple-toast[data-type="warning"] {
+  border-left-color: #ff9800;
+  background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+}
+
+/* Info variant (default) */
+.simple-toast[data-type="info"] {
+  border-left-color: #2196f3;
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+}
+
+.simple-toast strong {
+  display: block;
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 4px;
+  color: #333;
+}
+
+.simple-toast p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.4;
+  color: #666;
+  word-break: break-all;
+}
+
+.simple-toast button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: none;
+  border: none;
+  font-size: 16px;
+  font-weight: bold;
+  color: #999;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 3px;
+  transition: all 0.2s ease;
+}
+
+.simple-toast button:hover {
+  color: #666;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+/* Animation */
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+/* Toast exit animation */
+.simple-toast.toast-exit {
+  animation: slideOut 0.3s ease-in forwards;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .simple-toast {
+    top: 70px;
+    right: 10px;
+    left: 10px;
+    min-width: auto;
+    max-width: none;
+  }
+}
+
+/* Multiple toast stacking */
+.simple-toast:nth-child(1 of .simple-toast) {
+  top: 80px;
+}
+
+.simple-toast:nth-child(2 of .simple-toast) {
+  top: 160px;
+}
+
+.simple-toast:nth-child(3 of .simple-toast) {
+  top: 240px;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .simple-toast {
+    background: #2d3748;
+    border-left-color: #4299e1;
+    color: white;
+  }
+
+  .simple-toast strong {
+    color: #e2e8f0;
+  }
+
+  .simple-toast p {
+    color: #f5f7f9;
+  }
+
+  .simple-toast button {
+    color: #cbd5e0;
+  }
+
+  .simple-toast button:hover {
+    color: #e2e8f0;
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .simple-toast[data-type="success"] {
+    border-left-color: #48bb78;
+    background: linear-gradient(135deg, #22543de3 0%, #10b981 100%);
+  }
+
+  .simple-toast[data-type="error"] {
+    border-left-color: #f56565;
+    background: linear-gradient(135deg, #742a2a 0%, #553333 100%);
+  }
+
+  .simple-toast[data-type="warning"] {
+    border-left-color: #ed8936;
+    background: linear-gradient(135deg, #744210 0%, #553c13 100%);
+  }
+
+  .simple-toast[data-type="info"] {
+    border-left-color: #4299e1;
+    background: linear-gradient(135deg, #4376b5e7 0%, #3c5f8f 100%);
+  }
+}
