@@ -6,6 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { NotificationService } from '../../services/notification';
 import { Subscription } from 'rxjs';
+import { EchoService } from '../../services/echo';
 
 @Component({
   selector: 'app-navbar',
@@ -27,10 +28,13 @@ export class Navbar implements OnInit {
   private countSubscription!: Subscription;
   private loginSubscription!: Subscription;
 
+  notification: any = null;
+
   constructor(
     private notifService: NotificationService,
     public authService: Auth,
-    private router: Router
+    private router: Router,
+    private echoService: EchoService
   ) {}
 
   @HostListener('document:click', ['$event'])
@@ -56,9 +60,90 @@ export class Navbar implements OnInit {
     }
   }
 
+  listenForNotifications() {
+    const echo = this.echoService.getEcho();
+
+    echo
+      .channel('notifications')
+      .listen('.notification.received', (data: any) => {
+        // this.showNotification({
+        //   title: 'New Notification',
+        //   message: data.message,
+        //   time: data.time,
+        //   type: data.type
+        // });
+      });
+
+    const user = this.authService.getCurrentUser();
+    if (user) {
+      echo
+        .private(`notification.${user.id}`)
+        .listen('Notificationsent', (data: any) => {
+          this.showSimpleToast(
+            data.message,
+            'New Notification',
+            'info' // or use data.type if available
+          );
+
+          // Also update notification count
+          this.fetchUnreadCount();
+          console.log(data);
+        });
+    }
+  }
+
+  showSimpleToast(
+    message: string,
+    title: string = 'Notification',
+    type: 'success' | 'error' | 'warning' | 'info' = 'info'
+  ) {
+    // Create toast element
+    const toast = document.createElement('div');
+    toast.className = 'simple-toast';
+    toast.setAttribute('data-type', type);
+
+    toast.innerHTML = `
+      <strong>${title}</strong>
+      <p>${message}</p>
+      <button onclick="this.parentElement.remove()">×</button>
+    `;
+
+    // Add to body
+    document.body.appendChild(toast);
+
+    // Handle click on close button
+    const closeButton = toast.querySelector('button');
+    if (closeButton) {
+      closeButton.addEventListener('click', () => {
+        this.removeToast(toast);
+      });
+    }
+
+    // Auto remove after 5 seconds
+    // setTimeout(() => {
+    //   this.removeToast(toast);
+    // }, 5000);
+  }
+
+  // Helper method to remove toast with animation
+  private removeToast(toast: HTMLElement) {
+    toast.classList.add('toast-exit');
+    setTimeout(() => {
+      if (toast.parentElement) {
+        toast.parentElement.removeChild(toast);
+      }
+    }, 300); // Match animation duration
+  }
+
+  dismiss() {
+    this.notification = null;
+  }
+
   ngOnInit(): void {
+    this.listenForNotifications();
+
     this.currentUserAvatar = this.authService.getCurrentUser().avatar;
-    console.log(this.currentUserAvatar)
+    console.log(this.currentUserAvatar);
     this.countSubscription = this.notifService.unreadCount$.subscribe(
       (count) => {
         this.unreadCount = count;
