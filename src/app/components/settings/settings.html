@@ -1,0 +1,514 @@
+<div class="settings-container">
+  <div class="settings-header">
+    <h1>Settings</h1>
+    <p>Manage your account settings and preferences</p>
+  </div>
+
+  <mat-tab-group class="settings-tabs">
+    <!-- Profile Tab -->
+    <mat-tab label="Profile">
+      <div class="tab-content">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>Personal Information</mat-card-title>
+            <mat-card-subtitle>Update your personal details</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <form (ngSubmit)="saveProfile()" class="profile-form">
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Full Name</mat-label>
+                  <input
+                    matInput
+                    [(ngModel)]="userProfile.name"
+                    name="name"
+                    required
+                  />
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Email</mat-label>
+                  <input
+                    matInput
+                    type="email"
+                    [(ngModel)]="userProfile.email"
+                    name="email"
+                    required
+                  />
+                </mat-form-field>
+              </div>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Phone</mat-label>
+                  <input
+                    matInput
+                    [(ngModel)]="userProfile.phone"
+                    name="phone"
+                  />
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Location</mat-label>
+                  <input
+                    matInput
+                    [(ngModel)]="userProfile.location"
+                    name="location"
+                  />
+                </mat-form-field>
+              </div>
+
+              <mat-form-field
+                appearance="outline"
+                class="form-field full-width"
+              >
+                <mat-label>Bio</mat-label>
+                <textarea
+                  matInput
+                  [(ngModel)]="userProfile.bio"
+                  name="bio"
+                  rows="4"
+                  placeholder="Tell us about yourself..."
+                ></textarea>
+              </mat-form-field>
+
+              <button
+                mat-raised-button
+                color="primary"
+                type="submit"
+                [disabled]="loading"
+              >
+                <mat-icon *ngIf="loading" class="spinner">refresh</mat-icon>
+                {{ loading ? "Saving..." : "Save Profile" }}
+              </button>
+            </form>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="password-card">
+          <mat-card-header>
+            <mat-card-title>Change Password</mat-card-title>
+            <mat-card-subtitle>Update your password</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <form (ngSubmit)="changePassword()" class="password-form">
+              <mat-form-field
+                appearance="outline"
+                class="form-field full-width"
+              >
+                <mat-label>Current Password</mat-label>
+                <input
+                  matInput
+                  type="password"
+                  [(ngModel)]="userProfile.currentPassword"
+                  name="currentPassword"
+                  required
+                />
+              </mat-form-field>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>New Password</mat-label>
+                  <input
+                    matInput
+                    type="password"
+                    [(ngModel)]="userProfile.newPassword"
+                    name="newPassword"
+                    required
+                  />
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Confirm Password</mat-label>
+                  <input
+                    matInput
+                    type="password"
+                    [(ngModel)]="userProfile.confirmPassword"
+                    name="confirmPassword"
+                    required
+                  />
+                </mat-form-field>
+              </div>
+
+              <button
+                mat-raised-button
+                color="primary"
+                type="submit"
+                [disabled]="loading"
+              >
+                <mat-icon *ngIf="loading" class="spinner">refresh</mat-icon>
+                {{ loading ? "Changing..." : "Change Password" }}
+              </button>
+            </form>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </mat-tab>
+
+    <!-- Notifications Tab -->
+    <!-- Notifications Tab -->
+    <mat-tab label="Notifications">
+      <div class="tab-content">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>Notification Preferences</mat-card-title>
+            <mat-card-subtitle
+              >Choose how you want to be notified</mat-card-subtitle
+            >
+          </mat-card-header>
+          <mat-card-content>
+            <div class="settings-list" *ngIf="!loading">
+              <!-- <div class="setting-item">
+                <div class="setting-info">
+                  <h3>Email Notifications</h3>
+                  <p>Receive notifications via email</p>
+                </div>
+                <mat-slide-toggle
+                  [(ngModel)]="notificationSettings.emailNotifications"
+                  (change)="onNotificationChange()"
+                  [disabled]="notificationsLoading"
+                >
+                </mat-slide-toggle>
+              </div> -->
+
+              <!-- <mat-divider></mat-divider> -->
+
+              <div class="setting-item">
+                <div class="setting-info">
+                  <h3>Push Notifications</h3>
+                  <p>Receive browser push notifications</p>
+                </div>
+                <mat-slide-toggle
+                  [(ngModel)]="notificationSettings.pushNotifications"
+                  (change)="onNotificationChange()"
+                  [disabled]="notificationsLoading"
+                >
+                </mat-slide-toggle>
+              </div>
+
+              <mat-divider></mat-divider>
+
+              <div class="setting-item">
+                <div class="setting-info">
+                  <h3>Job Alerts</h3>
+                  <p>Get notified about new job matches</p>
+                </div>
+                <mat-slide-toggle
+                  [(ngModel)]="notificationSettings.jobAlerts"
+                  (change)="onNotificationChange()"
+                  [disabled]="notificationsLoading"
+                >
+                </mat-slide-toggle>
+              </div>
+
+              <mat-divider></mat-divider>
+
+              <div class="setting-item">
+                <div class="setting-info">
+                  <h3>Application Updates</h3>
+                  <p>Updates on your job applications</p>
+                </div>
+                <mat-slide-toggle
+                  [(ngModel)]="notificationSettings.applicationUpdates"
+                  (change)="onNotificationChange()"
+                  [disabled]="notificationsLoading"
+                >
+                </mat-slide-toggle>
+              </div>
+
+              <mat-divider></mat-divider>
+
+              <div class="setting-item">
+                <div class="setting-info">
+                  <h3>Interview Reminders</h3>
+                  <p>Reminders for upcoming interviews</p>
+                </div>
+                <mat-slide-toggle
+                  [(ngModel)]="notificationSettings.interviewReminders"
+                  (change)="onNotificationChange()"
+                  [disabled]="notificationsLoading"
+                >
+                </mat-slide-toggle>
+              </div>
+
+              <!-- Loading indicator -->
+              <div *ngIf="notificationsLoading" class="loading-indicator">
+                <mat-spinner diameter="20"></mat-spinner>
+                <span>Saving notification settings...</span>
+              </div>
+            </div>
+
+            <!-- Loading state for entire tab -->
+            <div *ngIf="loading" class="tab-loading">
+              <mat-spinner></mat-spinner>
+              <p>Loading settings...</p>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Notification Preferences Summary -->
+        <mat-card class="summary-card" *ngIf="!loading">
+          <mat-card-header>
+            <mat-card-title>Notification Summary</mat-card-title>
+            <mat-card-subtitle
+              >Your current notification preferences</mat-card-subtitle
+            >
+          </mat-card-header>
+          <mat-card-content>
+            <div class="preference-summary">
+              <!-- <div class="preference-item" *ngIf="notificationSettings.emailNotifications">
+                <mat-icon color="primary">email</mat-icon>
+                <span>Email notifications are enabled</span>
+              </div> -->
+              <div class="preference-item" *ngIf="notificationSettings.pushNotifications">
+                <mat-icon color="primary">notifications</mat-icon>
+                <span>Push notifications are enabled</span>
+              </div>
+              <div
+                class="preference-item"
+                *ngIf="notificationSettings.jobAlerts"
+              >
+                <mat-icon color="primary">work</mat-icon>
+                <span>Job alerts are enabled</span>
+              </div>
+              <div
+                class="preference-item"
+                *ngIf="notificationSettings.applicationUpdates"
+              >
+                <mat-icon color="primary">update</mat-icon>
+                <span>Application updates are enabled</span>
+              </div>
+              <div
+                class="preference-item"
+                *ngIf="notificationSettings.interviewReminders"
+              >
+                <mat-icon color="primary">event</mat-icon>
+                <span>Interview reminders are enabled</span>
+              </div>
+              <div
+                class="preference-item"
+                *ngIf="notificationSettings.newsletter"
+              >
+                <mat-icon color="primary">campaign</mat-icon>
+                <span>Newsletter subscription is active</span>
+              </div>
+              <div
+                class="preference-item"
+                *ngIf="
+                  !notificationSettings.emailNotifications && !notificationSettings.pushNotifications
+                "
+              >
+                <mat-icon color="warn">notifications_off</mat-icon>
+                <span>Most notifications are disabled</span>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </mat-tab>
+
+    <!-- Privacy Tab -->
+    <mat-tab label="Privacy">
+      <div class="tab-content">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>Privacy Settings</mat-card-title>
+            <mat-card-subtitle
+              >Control your privacy and data sharing</mat-card-subtitle
+            >
+          </mat-card-header>
+          <mat-card-content>
+            <div class="settings-list">
+              <div class="setting-item">
+                <div class="setting-info">
+                  <h3>Profile Visibility</h3>
+                  <p>Who can see your profile</p>
+                </div>
+                <mat-form-field appearance="outline" class="privacy-select">
+                  <mat-select
+                    [(ngModel)]="privacySettings.profileVisibility"
+                    (selectionChange)="savePrivacySettings()"
+                  >
+                    <mat-option value="public">Public</mat-option>
+                    <mat-option value="private">Private</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <mat-divider></mat-divider>
+
+              <div class="setting-item">
+                <div class="setting-info">
+                  <h3>Show Email Address</h3>
+                  <p>Make your email visible to others</p>
+                </div>
+                <mat-slide-toggle
+                  [(ngModel)]="privacySettings.showEmail"
+                  (change)="savePrivacySettings()"
+                >
+                </mat-slide-toggle>
+              </div>
+
+              <mat-divider></mat-divider>
+
+              <div class="setting-item">
+                <div class="setting-info">
+                  <h3>Show Phone Number</h3>
+                  <p>Make your phone number visible to others</p>
+                </div>
+                <mat-slide-toggle
+                  [(ngModel)]="privacySettings.showPhone"
+                  (change)="savePrivacySettings()"
+                >
+                </mat-slide-toggle>
+              </div>
+
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="data-card">
+          <mat-card-header>
+            <mat-card-title>Data Management</mat-card-title>
+            <mat-card-subtitle>Manage your personal data</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="data-actions">
+              <button mat-stroked-button color="primary" (click)="exportData()">
+                <mat-icon>download</mat-icon>
+                Export Data
+              </button>
+
+              <button mat-stroked-button color="warn" (click)="deleteAccount()">
+                <mat-icon>delete</mat-icon>
+                Delete Account
+              </button>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </mat-tab>
+
+    <!-- Preferences Tab -->
+    <mat-tab label="Preferences">
+      <div class="tab-content">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>Job Preferences</mat-card-title>
+            <mat-card-subtitle
+              >Set your job search preferences</mat-card-subtitle
+            >
+          </mat-card-header>
+          <mat-card-content>
+            <div class="preferences-section">
+              <h3>Job Types</h3>
+              <div class="checkbox-group">
+                <div *ngFor="let jobType of jobTypes" class="checkbox-item">
+                  <mat-checkbox
+                    [checked]="preferences.jobType.includes(jobType)"
+                    (change)="onJobTypeChange(jobType, $event)"
+                  >
+                    {{ jobType | titlecase }}
+                  </mat-checkbox>
+                </div>
+              </div>
+            </div>
+
+            <mat-divider></mat-divider>
+
+            <div class="preferences-section">
+              <h3>Industries</h3>
+              <div class="checkbox-group">
+                <div *ngFor="let industry of industries" class="checkbox-item">
+                  <mat-checkbox
+                    [checked]="preferences.industries.includes(industry)"
+                    (change)="onIndustryChange(industry, $event)"
+                  >
+                    {{ industry }}
+                  </mat-checkbox>
+                </div>
+              </div>
+            </div>
+
+            <mat-divider></mat-divider>
+
+            <div class="preferences-section">
+              <h3>Salary Range</h3>
+              <div class="salary-range">
+                <mat-form-field appearance="outline" class="salary-field">
+                  <mat-label>Minimum Salary</mat-label>
+                  <input
+                    matInput
+                    type="number"
+                    [(ngModel)]="preferences.salaryRange.min"
+                  />
+                  <span matPrefix>$</span>
+                </mat-form-field>
+
+                <span class="range-separator">to</span>
+
+                <mat-form-field appearance="outline" class="salary-field">
+                  <mat-label>Maximum Salary</mat-label>
+                  <input
+                    matInput
+                    type="number"
+                    [(ngModel)]="preferences.salaryRange.max"
+                  />
+                  <span matPrefix>$</span>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <mat-divider></mat-divider>
+
+            <div class="preferences-section">
+              <h3>Regional Settings</h3>
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Language</mat-label>
+                  <mat-select [(ngModel)]="preferences.language">
+                    <mat-option
+                      *ngFor="let lang of languages"
+                      [value]="lang.code"
+                    >
+                      {{ lang.name }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Timezone</mat-label>
+                  <mat-select [(ngModel)]="preferences.timezone">
+                    <mat-option *ngFor="let tz of timezones" [value]="tz">
+                      {{ tz }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Currency</mat-label>
+                  <mat-select [(ngModel)]="preferences.currency">
+                    <mat-option
+                      *ngFor="let currency of currencies"
+                      [value]="currency"
+                    >
+                      {{ currency }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="savePreferences()"
+            >
+              Save Preferences
+            </button>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>

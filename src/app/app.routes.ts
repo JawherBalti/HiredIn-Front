@@ -13,6 +13,7 @@ import { AuthGuard } from './guards/auth-guard';
 import { CurrentUserJobOfferList } from './components/current-user-job-offer-list/current-user-job-offer-list';
 import { CurrentUserCompanies } from './components/current-user-companies/current-user-companies';
 import { AuthCallbackComponent } from './components/auth-callback/auth-callback';
+import { SettingsComponent } from './components/settings/settings';
 
 export const routes: Routes = [
     { path: '', component: LandingPage },
@@ -29,7 +30,9 @@ export const routes: Routes = [
     { path: 'jobs/:id/applications', component: JobApplications, canActivate: [AuthGuard] },
     { path: 'notifications', component: Notifications, canActivate: [AuthGuard]},
     { path: 'current-user-job-offers', component: CurrentUserJobOfferList, canActivate: [AuthGuard]},
-    { path: 'companies', component: CurrentUserCompanies, canActivate: [AuthGuard]}
+    { path: 'companies', component: CurrentUserCompanies, canActivate: [AuthGuard]},
+      { path: 'settings', component: SettingsComponent, canActivate: [AuthGuard] },
+
 //   { path: 'apply', component: ApplyComponent, canActivate: [AuthGuard]  }, // Create this later
 //   { 
 //     path: 'dashboard', 

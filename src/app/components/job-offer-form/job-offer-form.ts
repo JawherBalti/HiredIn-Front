@@ -15,6 +15,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'; // Add this import
 import { MatIconModule } from '@angular/material/icon';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-job-offer-form',
@@ -25,6 +26,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatButtonModule,
     MatInputModule,
     MatFormFieldModule,
+    MatSelectModule,
     MatProgressSpinnerModule,
   ],
   templateUrl: './job-offer-form.html',
@@ -101,7 +103,7 @@ export class JobOfferForm implements OnInit {
         this.jobDataLoading = false;
       },
       (error) => {
-        console.error('Error fetching job offer', error)
+        console.error('Error fetching job offer', error);
         this.jobDataLoading = false;
       }
     );
